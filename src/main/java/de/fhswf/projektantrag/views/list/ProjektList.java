@@ -1,0 +1,94 @@
+package de.fhswf.projektantrag.views.list;
+
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.router.*;
+import de.fhswf.projektantrag.data.entities.ProjektEntity;
+import de.fhswf.projektantrag.data.service.ProjektService;
+import de.fhswf.projektantrag.views.main.MainView;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+import java.util.Map;
+
+@Route(value = "projekte", layout = MainView.class)
+@PageTitle("Projekte | ProjektAntrag")
+public class ProjektList extends VerticalLayout implements HasUrlParameter<String>{
+
+    @Autowired
+    private final ProjektService projektService;
+
+    private int status = -1;
+    private final Grid<ProjektEntity> grid;
+
+
+    public ProjektList(ProjektService projektService){
+        this.projektService = projektService;
+        grid = new Grid<>(ProjektEntity.class);
+        setId("project-list-view");
+        addClassName("project-list-view");
+        setSizeFull();
+
+        configureGrid();
+
+        add(getToolbar(), grid);
+    }
+    private void configureGrid() {
+        grid.addClassName("projekt-grid");
+        grid.setSizeFull();
+        grid.getColumns().forEach(col -> col.setAutoWidth(true));
+        grid.removeColumnByKey("beschreibung");
+        grid.removeColumnByKey("hintergrund");
+        grid.removeColumnByKey("skizze");
+        grid.setColumns("id", "statusid", "titel");
+        grid.asSingleSelect().addValueChangeListener(e->{
+            UI.getCurrent().getSession().setAttribute(ProjektEntity.class, e.getValue());
+            UI.getCurrent().navigate("projekt");
+        });
+        updateList("");
+    }
+
+    @Override
+    public void setParameter(BeforeEvent event, @OptionalParameter String parameter){
+        Location location = event.getLocation();
+        QueryParameters queryParameters = location.getQueryParameters();
+        Map<String, List<String>> parametersMap = queryParameters.getParameters();
+        if(parametersMap.get("status") == null){
+            status = -1;
+        }else{
+            status = Integer.parseInt(parametersMap.get("status").get(0));
+            updateList("");
+        }
+    }
+
+    private void updateList(String filter){
+        if(status == -1 && filter.isEmpty()){
+            grid.setItems(projektService.getAll());
+        }else if (status==-1){
+            grid.setItems(projektService.getAllByTitle(filter));
+        }else if(filter.isEmpty()){
+            grid.setItems(projektService.getAllByStatusId(status));
+        }else{
+            grid.setItems(projektService.getAllByStatusIdAndTitle(status, filter));
+        }
+    }
+
+    private HorizontalLayout getToolbar(){
+        TextField filterTitle = new TextField();
+
+        filterTitle.setPlaceholder("Suche nach Titel");
+        filterTitle.setClearButtonVisible(true);
+        filterTitle.setValueChangeMode(ValueChangeMode.LAZY);
+        filterTitle.addValueChangeListener(e->{
+            updateList(filterTitle.getValue());
+        });
+
+        HorizontalLayout toolbar = new HorizontalLayout(filterTitle);
+        return toolbar;
+    }
+
+}
