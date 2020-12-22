@@ -6,6 +6,7 @@ import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.JsModule;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -18,7 +19,6 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
-import de.fhswf.projektantrag.data.service.DozentService;
 import de.fhswf.projektantrag.views.list.ProjektList;
 import de.fhswf.projektantrag.views.utils.AboutView;
 
@@ -34,13 +34,9 @@ import java.util.Optional;
 public class MainView extends AppLayout {
 
     private final Tabs menu;
-    private H1 viewTitle;
+    private H1 viewTitle = new H1("ProjektAntrag");
 
-    private final DozentService dozentService;
-
-    public MainView(DozentService dozentService) {
-        this.dozentService = dozentService;
-
+    public MainView() {
         setPrimarySection(Section.DRAWER);
         addToNavbar(true, createHeaderContent());
         menu = createMenu();
@@ -48,6 +44,7 @@ public class MainView extends AppLayout {
     }
 
     private Component createHeaderContent() {
+        Anchor logout = new Anchor("logout", "Log out");
         HorizontalLayout layout = new HorizontalLayout();
         layout.setId("header");
         layout.getThemeList().set("dark", true);
@@ -56,7 +53,7 @@ public class MainView extends AppLayout {
         layout.setAlignItems(FlexComponent.Alignment.CENTER);
         layout.add(new DrawerToggle());
         viewTitle = new H1();
-        layout.add(viewTitle);
+        layout.add(viewTitle,logout);
         layout.add(new Image("images/user.svg", "Avatar"));
         return layout;
     }

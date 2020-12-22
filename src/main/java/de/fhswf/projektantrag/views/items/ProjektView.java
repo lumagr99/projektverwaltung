@@ -17,11 +17,14 @@ import de.fhswf.projektantrag.data.entities.*;
 import de.fhswf.projektantrag.data.service.*;
 import de.fhswf.projektantrag.views.main.MainView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
+//@PreAuthorize("hasRole('STUDENT')")
 @Route(value = "projekt", layout = MainView.class)
 @PageTitle("Projekt | ProjektAntrag")
 public class ProjektView extends VerticalLayout {
@@ -52,6 +55,8 @@ public class ProjektView extends VerticalLayout {
     private KommentareVerticalLayout kommentare;
     private StatusToolbarHorizontalLayout statusToolbar;
 
+    private final String role = "";
+
     ProjektView(ProjektService projektService, StudentService studentService,
                 Student2ProjektService student2ProjektService, AnsprechpartnerService ansprechpartnerService,
                 Ansprechpartner2ProjektService ansprechpartner2ProjektService,
@@ -62,6 +67,10 @@ public class ProjektView extends VerticalLayout {
         } catch (Exception e) {
             projektEntity = null;
         }
+        createProjektEntityIfNotExist();
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(auth.getAuthorities().toString());
     }
 
     @PostConstruct
