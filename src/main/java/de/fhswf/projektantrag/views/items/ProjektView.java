@@ -24,7 +24,6 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
-//@PreAuthorize("hasRole('STUDENT')")
 @Route(value = "projekt", layout = MainView.class)
 @PageTitle("Projekt | ProjektAntrag")
 public class ProjektView extends VerticalLayout {
@@ -55,7 +54,7 @@ public class ProjektView extends VerticalLayout {
     private KommentareVerticalLayout kommentare;
     private StatusToolbarHorizontalLayout statusToolbar;
 
-    private final String role = "";
+    private String role = "";
 
     ProjektView(ProjektService projektService, StudentService studentService,
                 Student2ProjektService student2ProjektService, AnsprechpartnerService ansprechpartnerService,
@@ -70,7 +69,18 @@ public class ProjektView extends VerticalLayout {
         createProjektEntityIfNotExist();
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(auth.getAuthorities().toString());
+        if (auth != null &&
+                auth.getAuthorities().stream().anyMatch(a ->
+                        a.getAuthority().equalsIgnoreCase("student"))) {
+            role = "Student";
+        } else if (auth != null && auth.getAuthorities().stream().anyMatch(a ->
+                a.getAuthority().equalsIgnoreCase("dozent"))) {
+            role = "Dozent";
+        } else if (auth != null && auth.getAuthorities().stream().anyMatch(a ->
+                a.getAuthority().equalsIgnoreCase("ansprechpartner"))){
+            role = "Ansprechpartner";
+        }
+        System.out.println(auth.getDetails().toString());
     }
 
     @PostConstruct
@@ -82,12 +92,34 @@ public class ProjektView extends VerticalLayout {
         kommentare = new KommentareVerticalLayout();
         toolbar = new ToolbarHorizontalLayout();
         statusToolbar = new StatusToolbarHorizontalLayout();
-        this.add(textFields,
+
+        //Alles
+        /*this.add(textFields,
                 new H3("Studenten"), studenten,
                 new H3("Ansprechpartner"), ansprechpartner,
                 kommentare,
                 toolbar,
-                statusToolbar);
+                statusToolbar);*/
+
+        //Student
+        if(role.equalsIgnoreCase("student")){
+            this.add(textFields,
+                    new H3("Studenten"), studenten,
+                    new H3("Ansprechpartner"), ansprechpartner,
+                    kommentare,
+                    toolbar);
+        }else if(role.equalsIgnoreCase("dozent")){
+            this.add(textFields,
+                    new H3("Studenten"), studenten,
+                    new H3("Ansprechpartner"), ansprechpartner,
+                    kommentare,
+                    statusToolbar);
+        }else if(role.equalsIgnoreCase("ansprechpartner")){
+            this.add(textFields,
+                    new H3("Studenten"), studenten,
+                    new H3("Ansprechpartner"), ansprechpartner,
+                    kommentare);
+        }
     }
 
     private void createProjektEntityIfNotExist() {
@@ -131,8 +163,9 @@ public class ProjektView extends VerticalLayout {
                 this.add(new StudentVerticalLayout(studentEntity));
             }
 
-            //TODO view only as student
-            if (this.getComponentCount() < 3 && projektEntity.getStatusid() == 1) {
+            if (this.getComponentCount() < 3 &&
+                    projektEntity.getStatusid() == 1 &&
+                        role.equalsIgnoreCase("student")) {
                 comboBox = new ComboBox<StudentEntity>();
                 comboBox.setLabel("Student");
                 //TODO Vor und Nachname?
@@ -222,8 +255,9 @@ public class ProjektView extends VerticalLayout {
                 AnsprechpartnerEntity ansprechpartnerEntity =
                         ansprechpartnerService.get(ansprechpartnerEntities.get(0).getAnsprechpartnerid()).get();
                 this.add(new AnsprechpartnerVerticalLayout(ansprechpartnerEntity));
-            } else if (ansprechpartnerEntities.size() == 0 && projektEntity.getStatusid() == 1) {
-                //TODO View only as student
+            } else if (ansprechpartnerEntities.size() == 0 &&
+                            projektEntity.getStatusid() == 1 &&
+                                role.equalsIgnoreCase("student")) {
                 addAnsprechpartner = new Button("Ansprechpartner hinzufügen");
                 addAnsprechpartner.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
                 addAnsprechpartner.setId("add-ansprechpartner-button");
@@ -310,8 +344,8 @@ public class ProjektView extends VerticalLayout {
             beschreibung.setMinHeight("400px");
             beschreibung.setHeight("80%");
 
-            //TODO status != 1 oder kein student!!
-            if (projektEntity.getStatusid() != 1) {
+            if (projektEntity.getStatusid() != 1 ||
+                    !role.equalsIgnoreCase("student")) {
                 beschreibung.setReadOnly(true);
                 hintergrund.setReadOnly(true);
                 skizze.setReadOnly(true);
