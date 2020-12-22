@@ -122,7 +122,7 @@ public class ProjektList extends VerticalLayout implements HasUrlParameter<Strin
             //TODO Ansprechpartner ID get
             List<Ansprechpartner2ProjektEntity> projektsByAnsprechpartnerID = ansprechpartner2ProjektService.findProjektsByAnsprechpartnerID(1);
             for(Ansprechpartner2ProjektEntity ansprechpartner2ProjektEntity : projektsByAnsprechpartnerID){
-                list.add(projektService.get(ansprechpartner2ProjektEntity.getProjektId());
+                list.add(projektService.get(ansprechpartner2ProjektEntity.getProjektId()).get());
             }
         }
         return list;
