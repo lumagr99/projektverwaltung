@@ -1,11 +1,11 @@
 package de.fhswf.projektantrag.views.list;
 
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.*;
 import de.fhswf.projektantrag.data.entities.ProjektEntity;
 import de.fhswf.projektantrag.data.entities.Student2ProjektEntity;
@@ -36,6 +36,7 @@ public class ProjektList extends VerticalLayout implements HasUrlParameter<Strin
     private List<ProjektEntity> projekte;
 
     private String role = "";
+    private StudentUserDetails activeStudent;
 
 
     public ProjektList(ProjektService projektService, Student2ProjektService student2ProjektService){
@@ -52,6 +53,7 @@ public class ProjektList extends VerticalLayout implements HasUrlParameter<Strin
                 auth.getAuthorities().stream().anyMatch(a ->
                         a.getAuthority().equalsIgnoreCase("student"))) {
             role = "Student";
+            activeStudent = (StudentUserDetails)auth.getPrincipal();
         } else if (auth != null && auth.getAuthorities().stream().anyMatch(a ->
                 a.getAuthority().equalsIgnoreCase("dozent"))) {
             role = "Dozent";
@@ -59,17 +61,16 @@ public class ProjektList extends VerticalLayout implements HasUrlParameter<Strin
                 a.getAuthority().equalsIgnoreCase("ansprechpartner"))){
             role = "Ansprechpartner";
         }
-        System.out.println(auth.getDetails());
-        System.out.println(auth.getAuthorities());
-        System.out.println(auth.getCredentials());
-        System.out.println(auth.getPrincipal().getClass());
-        StudentUserDetails currStudent = (StudentUserDetails)auth.getPrincipal();
-        System.out.println(currStudent.getUsername());
-        System.out.println(auth.getName());
+
         projekte = generateProjektList();
         grid = new Grid<>(ProjektEntity.class);
         configureGrid();
-        add(getToolbar(), grid);
+
+        if(role.equalsIgnoreCase("student")){
+            add(getToolbar(), grid);
+        }else{
+            add(grid);
+        }
     }
 
     private void configureGrid() {
@@ -95,7 +96,7 @@ public class ProjektList extends VerticalLayout implements HasUrlParameter<Strin
         if(parametersMap.get("status") == null){
             status = -1;
         }else{
-            status = Integer.parseInt(parametersMap.get("status").get(0));
+            status = Integer.parseInt(parametersMap.get("status").get(activeStudent.getId()));
             updateList("");
         }
     }
@@ -119,16 +120,10 @@ public class ProjektList extends VerticalLayout implements HasUrlParameter<Strin
     }
 
     private HorizontalLayout getToolbar(){
-        TextField filterTitle = new TextField();
+        Button create = new Button("Neues Projekt");
+        create.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
-        filterTitle.setPlaceholder("Suche nach Titel");
-        filterTitle.setClearButtonVisible(true);
-        filterTitle.setValueChangeMode(ValueChangeMode.LAZY);
-        filterTitle.addValueChangeListener(e->{
-            updateList(filterTitle.getValue());
-        });
-
-        HorizontalLayout toolbar = new HorizontalLayout(filterTitle);
+        HorizontalLayout toolbar = new HorizontalLayout(create);
         return toolbar;
     }
 }
