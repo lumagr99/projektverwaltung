@@ -4,4 +4,5 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public interface ProjectUserDetails extends UserDetails {
     int getId();
+    //Sicherungskopie
 }
