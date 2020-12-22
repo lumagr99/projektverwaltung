@@ -80,7 +80,6 @@ public class ProjektView extends VerticalLayout {
                 a.getAuthority().equalsIgnoreCase("ansprechpartner"))){
             role = "Ansprechpartner";
         }
-        System.out.println(auth.getDetails().toString());
     }
 
     @PostConstruct
