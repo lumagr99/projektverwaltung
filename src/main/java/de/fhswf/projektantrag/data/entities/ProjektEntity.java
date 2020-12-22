@@ -98,14 +98,4 @@ public class ProjektEntity {
         result = 31 * result + (titel != null ? titel.hashCode() : 0);
         return result;
     }
-
-    @Override
-    public String toString() {
-        return "Id: " + this.getId() +
-                " Titel: " + this.getTitel() +
-                " Skizze: " + this.getSkizze() +
-                " Beschreibung: " + this.getBeschreibung() +
-                " Hintergrund: " + this.getHintergrund() +
-                " Status: " + this.getStatusid();
-    }
 }

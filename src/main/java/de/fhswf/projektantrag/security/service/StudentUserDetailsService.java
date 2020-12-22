@@ -1,8 +1,8 @@
 package de.fhswf.projektantrag.security.service;
 
-import de.fhswf.projektantrag.data.entities.StudentEntity;
-import de.fhswf.projektantrag.data.repository.StudentRepository;
-import de.fhswf.projektantrag.security.details.StudentUserDetails;
+import de.fhswf.projektantrag.data.entities.BenutzerEntity;
+import de.fhswf.projektantrag.data.service.BenutzerService;
+import de.fhswf.projektantrag.security.details.BenutzerUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,14 +15,14 @@ import java.util.Optional;
 public class StudentUserDetailsService implements UserDetailsService {
 
     @Autowired
-    StudentRepository studentRepository;
+    BenutzerService benutzerService;
 
     @Override
     public UserDetails loadUserByUsername(String benutzername) throws UsernameNotFoundException {
-        Optional<StudentEntity> user = Optional.ofNullable(studentRepository.findByBenutzername(benutzername));
+        Optional<BenutzerEntity> user = Optional.ofNullable(benutzerService.findByBenutzername(benutzername));
         user.orElseThrow(() -> new UsernameNotFoundException("Not found: " + benutzername));
 
-        return user.map(StudentUserDetails::new).get();
+        return user.map(BenutzerUserDetails::new).get();
 
     }
 }

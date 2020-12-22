@@ -46,10 +46,4 @@ public class OrganisationEntity {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
     }
-
-    @Override
-    public String toString() {
-        return "Id: " + this.getId() +
-                " Name: " + this.getName();
-    }
 }

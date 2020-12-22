@@ -31,13 +31,9 @@ public class ProjektView extends VerticalLayout {
     @Autowired
     private ProjektService projektService;
     @Autowired
-    private StudentService studentService;
+    private BenutzerService benutzerService;
     @Autowired
-    private Student2ProjektService student2ProjektService;
-    @Autowired
-    private Ansprechpartner2ProjektService ansprechpartner2ProjektService;
-    @Autowired
-    private AnsprechpartnerService ansprechpartnerService;
+    private Benutzer2ProjektService benutzer2ProjektService;
     @Autowired
     private OrganisationService organisationService;
     @Autowired
@@ -56,9 +52,8 @@ public class ProjektView extends VerticalLayout {
 
     private String role = "";
 
-    ProjektView(ProjektService projektService, StudentService studentService,
-                Student2ProjektService student2ProjektService, AnsprechpartnerService ansprechpartnerService,
-                Ansprechpartner2ProjektService ansprechpartner2ProjektService,
+    ProjektView(ProjektService projektService, BenutzerService benutzerService,
+                Benutzer2ProjektService benutzer2ProjektService,
                 KommentarService kommentarService, StatusService statusService) {
         setSizeFull();
         try {
@@ -100,7 +95,6 @@ public class ProjektView extends VerticalLayout {
                 toolbar,
                 statusToolbar);*/
 
-        //Student
         if(role.equalsIgnoreCase("student")){
             this.add(textFields,
                     new H3("Studenten"), studenten,
@@ -128,9 +122,9 @@ public class ProjektView extends VerticalLayout {
             projektService.save(projektEntity);
 
             //TODO Get StudentID by current user
-            Student2ProjektEntity student2ProjektEntity = new Student2ProjektEntity();
-            student2ProjektEntity.setProjektId(projektEntity.getId());
-            student2ProjektService.save(student2ProjektEntity);
+            Benutzer2ProjektEntity benutzer2ProjektEntity = new Benutzer2ProjektEntity();
+            benutzer2ProjektEntity.setProjektid(projektEntity.getId());
+            benutzer2ProjektService.save(benutzer2ProjektEntity);
         }
     }
 
@@ -149,27 +143,27 @@ public class ProjektView extends VerticalLayout {
     }
 
     private class StudentenHorizontalLayout extends HorizontalLayout {
-        private final List<Student2ProjektEntity> student2ProjektEntities;
-        private ComboBox<StudentEntity> comboBox;
+        private final List<Benutzer2ProjektEntity> benutzer2ProjektEntities;
+        private ComboBox<BenutzerEntity> comboBox;
         private Button addStudent;
 
 
         StudentenHorizontalLayout() {
-            student2ProjektEntities = student2ProjektService.findStudentsByProjectID(projektEntity.getId());
+            benutzer2ProjektEntities = benutzer2ProjektService.findBenutzer2ProjektByProjektID(projektEntity.getId());
 
-            for (int i = 0; i < student2ProjektEntities.size(); i++) {
-                StudentEntity studentEntity = studentService.get(student2ProjektEntities.get(i).getStudentId()).get();
+            for (int i = 0; i < benutzer2ProjektEntities.size(); i++) {
+                BenutzerEntity studentEntity = benutzerService.get(benutzer2ProjektEntities.get(i).getBenutzerid()).get();
                 this.add(new StudentVerticalLayout(studentEntity));
             }
 
             if (this.getComponentCount() < 3 &&
                     projektEntity.getStatusid() == 1 &&
                         role.equalsIgnoreCase("student")) {
-                comboBox = new ComboBox<StudentEntity>();
+                comboBox = new ComboBox<BenutzerEntity>();
                 comboBox.setLabel("Student");
                 //TODO Vor und Nachname?
-                comboBox.setItemLabelGenerator(StudentEntity::getNachname);
-                comboBox.setItems(studentService.getAll());
+                comboBox.setItemLabelGenerator(BenutzerEntity::getNachname);
+                comboBox.setItems(benutzerService.getAll());
 
                 manageStudentAddButton();
 
@@ -190,19 +184,19 @@ public class ProjektView extends VerticalLayout {
             addStudent.addClickListener(buttonClickEvent -> {
                 boolean inList = false;
 
-                for (int i = 0; i < student2ProjektEntities.size(); i++) {
-                    if (student2ProjektEntities.get(i).getStudentId() == comboBox.getValue().getId()) {
+                for (int i = 0; i < benutzer2ProjektEntities.size(); i++) {
+                    if (benutzer2ProjektEntities.get(i).getBenutzerid() == comboBox.getValue().getId()) {
                         inList = true;
                         break;
                     }
                 }
 
                 if (!inList) {
-                    Student2ProjektEntity student2ProjektEntity = new Student2ProjektEntity();
-                    student2ProjektEntity.setStudentId(comboBox.getValue().getId());
-                    student2ProjektEntity.setProjektId(projektEntity.getId());
-                    student2ProjektService.save(student2ProjektEntity);
-                    this.add(new StudentVerticalLayout(studentService.get(comboBox.getValue().getId()).get()));
+                    Benutzer2ProjektEntity student2ProjektEntity = new Benutzer2ProjektEntity();
+                    student2ProjektEntity.setBenutzerid(comboBox.getValue().getId());
+                    student2ProjektEntity.setProjektid(projektEntity.getId());
+                    benutzer2ProjektService.save(student2ProjektEntity);
+                    this.add(new StudentVerticalLayout(benutzerService.get(comboBox.getValue().getId()).get()));
                     comboBox.setVisible(false);
                     addStudent.setVisible(false);
                 } else {
@@ -217,60 +211,76 @@ public class ProjektView extends VerticalLayout {
         H5 vorname;
         H5 nachname;
 
-        StudentEntity studentEntity;
+        BenutzerEntity benutzerEntity;
 
-        StudentVerticalLayout(StudentEntity studentEntity) {
-            if (studentEntity == null) {
+        StudentVerticalLayout(BenutzerEntity benutzerEntity) {
+            if (benutzerEntity == null) {
                 throw new IllegalArgumentException();
             }
 
-            this.studentEntity = studentEntity;
+            this.benutzerEntity = benutzerEntity;
 
-            vorname = new H5(studentEntity.getVorname());
-            nachname = new H5(studentEntity.getNachname());
+            vorname = new H5(benutzerEntity.getVorname());
+            nachname = new H5(benutzerEntity.getNachname());
 
             VerticalLayout layout = new VerticalLayout();
             layout.add(vorname, nachname);
-            layout.setId("student-" + studentEntity.getNachname());
+            layout.setId("student-" + benutzerEntity.getNachname());
             layout.setWidth("33%");
 
             this.add(vorname, nachname);
         }
 
-        public StudentEntity getStudentEntity() {
-            return studentEntity;
+        public BenutzerEntity getBenutzerEntity() {
+            return benutzerEntity;
         }
     }
 
 
     private class AnsprechpartnerHorizontalLayout extends HorizontalLayout {
-        private final List<Ansprechpartner2ProjektEntity> ansprechpartnerEntities;
-        private ComboBox<AnsprechpartnerEntity> comboBox;
-        private Button addAnsprechpartner;
+        private List<Benutzer2ProjektEntity> benutzer2ProjektEntities;
+        private ComboBox<BenutzerEntity> comboBox;
+        private Button addBenutzer;
 
         AnsprechpartnerHorizontalLayout() {
-            ansprechpartnerEntities = ansprechpartner2ProjektService.findAnsprechpartnerByProjektID(projektEntity.getId());
-            if (ansprechpartnerEntities.size() == 1) {
-                AnsprechpartnerEntity ansprechpartnerEntity =
-                        ansprechpartnerService.get(ansprechpartnerEntities.get(0).getAnsprechpartnerid()).get();
-                this.add(new AnsprechpartnerVerticalLayout(ansprechpartnerEntity));
-            } else if (ansprechpartnerEntities.size() == 0 &&
+            List<Benutzer2ProjektEntity> helper = new ArrayList<Benutzer2ProjektEntity>();
+            benutzer2ProjektEntities = benutzer2ProjektService.findBenutzer2ProjektByProjektID(projektEntity.getId());
+            System.out.println(benutzer2ProjektEntities.size());
+
+            for (Benutzer2ProjektEntity benutzer2Projekt : benutzer2ProjektEntities){
+                System.out.println(benutzer2Projekt.getBenutzerid());
+                BenutzerEntity benutzerEntity = benutzerService.get(benutzer2Projekt.getBenutzerid()).get();
+                if(benutzerEntity.getRolleId() == 3){
+                    helper.add(benutzer2Projekt);
+                }
+            }
+
+
+            benutzer2ProjektEntities = helper;
+            System.out.println(benutzer2ProjektEntities.size());
+
+
+            if (benutzer2ProjektEntities.size() == 1) {
+                BenutzerEntity benutzerEntity =
+                        benutzerService.get(benutzer2ProjektEntities.get(0).getBenutzerid()).get();
+                this.add(new AnsprechpartnerVerticalLayout(benutzerEntity));
+            } else if (benutzer2ProjektEntities.size() == 0 &&
                             projektEntity.getStatusid() == 1 &&
                                 role.equalsIgnoreCase("student")) {
-                addAnsprechpartner = new Button("Ansprechpartner hinzufügen");
-                addAnsprechpartner.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
-                addAnsprechpartner.setId("add-ansprechpartner-button");
-                comboBox = new ComboBox<AnsprechpartnerEntity>();
+                addBenutzer = new Button("Ansprechpartner hinzufügen");
+                addBenutzer.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
+                addBenutzer.setId("add-ansprechpartner-button");
+                comboBox = new ComboBox<BenutzerEntity>();
 
                 //TODO Vor und Nachname?
-                comboBox.setItemLabelGenerator(AnsprechpartnerEntity::getNachname);
-                comboBox.setItems(ansprechpartnerService.getAll());
+                comboBox.setItemLabelGenerator(BenutzerEntity::getNachname);
+                comboBox.setItems(benutzerService.getAll());
 
-                addAnsprechpartner.addClickListener(buttonClickEvent -> {
+                addBenutzer.addClickListener(buttonClickEvent -> {
                     manageAnsprechpartnerAddButton();
                 });
 
-                this.add(new VerticalLayout(comboBox, addAnsprechpartner));
+                this.add(new VerticalLayout(comboBox, addBenutzer));
             }
 
             this.setWidthFull();
@@ -278,30 +288,30 @@ public class ProjektView extends VerticalLayout {
         }
 
         private void manageAnsprechpartnerAddButton() {
-            Ansprechpartner2ProjektEntity ansprechpartner2ProjektEntity = new Ansprechpartner2ProjektEntity();
-            ansprechpartner2ProjektEntity.setAnsprechpartnerid(comboBox.getValue().getId());
+            Benutzer2ProjektEntity benutzer2ProjektEntity = new Benutzer2ProjektEntity();
+            benutzer2ProjektEntity.setBenutzerid(comboBox.getValue().getId());
             System.out.println(comboBox.getValue().getNachname());
-            ansprechpartner2ProjektEntity.setProjektId(projektEntity.getId());
-            ansprechpartner2ProjektService.save(ansprechpartner2ProjektEntity);
+            benutzer2ProjektEntity.setProjektid(projektEntity.getId());
+            benutzer2ProjektService.save(benutzer2ProjektEntity);
             this.add(new AnsprechpartnerVerticalLayout(comboBox.getValue()));
             comboBox.setVisible(false);
-            addAnsprechpartner.setVisible(false);
+            addBenutzer.setVisible(false);
         }
     }
 
     private class AnsprechpartnerVerticalLayout extends VerticalLayout {
-        AnsprechpartnerEntity ansprechpartnerEntity;
+        BenutzerEntity ansprechpartnerEntity;
 
-        AnsprechpartnerVerticalLayout(AnsprechpartnerEntity ansprechpartnerEntity) {
-            if (ansprechpartnerEntity == null) {
+        AnsprechpartnerVerticalLayout(BenutzerEntity benutzerEntity) {
+            if (benutzerEntity == null) {
                 throw new IllegalArgumentException();
             }
-            this.ansprechpartnerEntity = ansprechpartnerEntity;
-            H5 vorname = new H5(ansprechpartnerEntity.getVorname());
-            H5 nachname = new H5(ansprechpartnerEntity.getNachname());
-            H6 organisation = new H6(organisationService.get(ansprechpartnerEntity.getOrganisation()).get().getName());
+            this.ansprechpartnerEntity = benutzerEntity;
+            H5 vorname = new H5(benutzerEntity.getVorname());
+            H5 nachname = new H5(benutzerEntity.getNachname());
+            H6 organisation = new H6(organisationService.get(benutzerEntity.getOrganisationId()).get().getName());
 
-            this.setId("ansprechpartner-" + ansprechpartnerEntity.getNachname());
+            this.setId("ansprechpartner-" + benutzerEntity.getNachname());
             this.setWidthFull();
             this.add(vorname, nachname, organisation);
         }

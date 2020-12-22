@@ -1,6 +1,6 @@
 package de.fhswf.projektantrag.security.details;
 
-import de.fhswf.projektantrag.data.entities.StudentEntity;
+import de.fhswf.projektantrag.data.entities.BenutzerEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -8,22 +8,25 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class StudentUserDetails implements ProjectUserDetails {
+public class BenutzerUserDetails implements ProjectUserDetails {
+
 
     private final String userName;
     private final String password;
     private final int id;
+    private final int role;
     private final List<GrantedAuthority> authorities = new ArrayList<>();
 
-    public StudentUserDetails(StudentEntity studentEntity){
-        if(studentEntity == null){
+    public BenutzerUserDetails(BenutzerEntity benutzerEntity){
+        if(benutzerEntity == null){
             throw new IllegalArgumentException();
         }
 
-        this.userName = studentEntity.getBenutzername();
-        this.password = studentEntity.getPasswort();
+        this.userName = benutzerEntity.getBenutzername();
+        this.password = benutzerEntity.getPasswort();
         this.authorities.add(new SimpleGrantedAuthority("Student"));
-        this.id = studentEntity.getId();
+        this.id = benutzerEntity.getId();
+        this.role = benutzerEntity.getRolleId();
     }
 
     @Override
@@ -64,5 +67,10 @@ public class StudentUserDetails implements ProjectUserDetails {
     @Override
     public int getId() {
         return this.id;
+    }
+
+    @Override
+    public int getRolle() {
+        return this.role;
     }
 }

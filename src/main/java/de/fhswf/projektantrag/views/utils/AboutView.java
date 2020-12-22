@@ -1,6 +1,5 @@
 package de.fhswf.projektantrag.views.utils;
 
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.router.PageTitle;
@@ -15,93 +14,88 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class AboutView extends Div {
 
     @Autowired
-    private StudentService studentService;
+    private BenutzerService benutzerService;
     @Autowired
     private ProjektService projektService;
     @Autowired
     private StatusService statusService;
     @Autowired
-    private DozentService dozentService;
-    @Autowired
-    private AnsprechpartnerService ansprechpartnerService;
-    @Autowired
     private KommentarService kommentarService;
     @Autowired
-    private Ansprechpartner2ProjektService ansprechpartner2ProjektService;
-    @Autowired
-    private Student2ProjektService student2ProjektService;
+    private Benutzer2ProjektService benutzer2ProjektService;
     @Autowired
     private OrganisationService organisationService;
+    @Autowired
+    private RollenService rollenService;
 
-    public AboutView(StudentService studentService, ProjektService projektService, StatusService statusService,
-                     DozentService dozentService, AnsprechpartnerService ansprechpartnerService,
-                     KommentarService kommentarService, Ansprechpartner2ProjektService ansprechpartner2ProjektService,
-                     Student2ProjektService student2ProjektService, OrganisationService organisationService) {
+    public AboutView(BenutzerService benutzerService, ProjektService projektService, StatusService statusService,
+                     KommentarService kommentarService, Benutzer2ProjektService benutzer2ProjektService,
+                     OrganisationService organisationService, RollenService rollenService) {
         setId("about-view");
 
-        Button studentTestData = createStudentTestData(studentService, "Student");
+        Button studentTestData = createStudentTestData(benutzerService, "Student");
         Button statusTestData = createStatusTestData(statusService, "Status");
         Button projektTestData = createProjektTestData(projektService, "Projekt");
-        Button dozentTestData = createDozentTestData(dozentService, "Dozent");
-        Button ansprechpartnerTestData = createAnsprechpartnerTestData(ansprechpartnerService, "Ansprechpartner");
         Button kommentarTestData = createKommentarTestData(kommentarService, "Kommentar");
-        Button ansprechpartner2ProjektTestData = createAnsprechpartner2ProjektTestData(ansprechpartner2ProjektService, "Ansprechpartner2Projekt");
-        Button student2ProjektTestData = createStudent2ProjektTestData(student2ProjektService, "Student2Projekt");
+        Button benutzer2ProjektTestData = createBenutzer2ProjektTestData(benutzer2ProjektService, "Benutzer2Projekt");
         Button organsisationTestData = createOrganisationTestData(organisationService, "Organisation");
+        Button dozentTestData = createDozentTestData(benutzerService, "Dozent");
+        Button ansprechpartnerTestData = createAnsprechpartnerTestData(benutzerService, "Ansprechpartner");
+        Button rollenTestData = createRollenTestData(rollenService, "Rollen");
 
-
-
-        add(new Text("Content placeholder"), studentTestData, statusTestData, projektTestData,
-                dozentTestData, ansprechpartnerTestData, kommentarTestData,
-                ansprechpartner2ProjektTestData, student2ProjektTestData,
-                organsisationTestData);
+        add(rollenTestData, statusTestData, organsisationTestData,
+                studentTestData, dozentTestData, ansprechpartnerTestData,
+                projektTestData, kommentarTestData, benutzer2ProjektTestData);
         }
 
-    private Button createStudentTestData(StudentService service, String name){
+    private Button createStudentTestData(BenutzerService service, String name){
         Button button = new Button("Import "+name);
         button.setId("import-button-"+name);
         button.addClickListener(e -> {
-            for(int i = 0; i<10; i++){
-                StudentEntity student = new StudentEntity();
-                student.setVorname("Hermann"+i);
-                student.setNachname("Meier"+i);
-                student.setBenutzername("HermannMeier"+i);
-                student.setPasswort("1234"+i);
-                service.save(student);
+            for(int i = 1; i<11; i++){
+                BenutzerEntity benutzer = new BenutzerEntity();
+                benutzer.setVorname("Hermann"+i);
+                benutzer.setNachname("Meier"+i);
+                benutzer.setBenutzername("HermannMeier"+i);
+                benutzer.setPasswort("1234"+i);
+                benutzer.setRolleId(1);
+                service.save(benutzer);
             }
             button.setEnabled(false);
         });
         return button;
     }
 
-    private Button createDozentTestData(DozentService service, String name){
+    private Button createDozentTestData(BenutzerService service, String name){
         Button button = new Button("Import "+name);
         button.setId("import-button-"+name);
         button.addClickListener(e -> {
-            for(int i = 0; i<10; i++){
-                DozentEntity dozent = new DozentEntity();
-                dozent.setVorname("Herfrau"+i);
-                dozent.setNachname("Mauer"+i);
-                dozent.setBenutzername("HerfrauMauer"+i);
-                dozent.setPassword("test"+i);
-                service.save(dozent);
+            for(int i = 1; i<11; i++){
+                BenutzerEntity benutzer = new BenutzerEntity();
+                benutzer.setVorname("Herfrau"+i);
+                benutzer.setNachname("Mauer"+i);
+                benutzer.setBenutzername("HerfrauMauer"+i);
+                benutzer.setPasswort("test"+i);
+                benutzer.setRolleId(2);
+                service.save(benutzer);
             }
             button.setEnabled(false);
         });
         return button;
     }
 
-    private Button createAnsprechpartnerTestData(AnsprechpartnerService service, String name){
+    private Button createAnsprechpartnerTestData(BenutzerService service, String name){
         Button button = new Button("Import "+name);
         button.setId("import-button-"+name);
         button.addClickListener(e -> {
-            for(int i = 0; i<10; i++){
-                AnsprechpartnerEntity ansprechpartner = new AnsprechpartnerEntity();
-                ansprechpartner.setVorname("Herfrau"+i);
-                ansprechpartner.setNachname("Mauer"+i);
-                ansprechpartner.setBenutzername("HerfrauMauer"+i);
+            for(int i = 1; i<11; i++){
+                BenutzerEntity ansprechpartner = new BenutzerEntity();
+                ansprechpartner.setVorname("Ferdinand"+i);
+                ansprechpartner.setNachname("Klaus"+i);
+                ansprechpartner.setBenutzername("Ferdinand"+i);
                 ansprechpartner.setPasswort("test"+i);
-                ansprechpartner.setOrganisation(i+1);
+                ansprechpartner.setOrganisationId(i+1);
+                ansprechpartner.setRolleId(3);
                 service.save(ansprechpartner);
             }
             button.setEnabled(false);
@@ -185,31 +179,38 @@ public class AboutView extends Div {
         return button;
     }
 
-    private Button createAnsprechpartner2ProjektTestData(Ansprechpartner2ProjektService service, String name){
+    private Button createBenutzer2ProjektTestData(Benutzer2ProjektService service, String name){
         Button button = new Button("Import "+name);
         button.setId("import-button-"+name);
         button.addClickListener(e -> {
-            for(int i = 0; i<5; i++){
-                Ansprechpartner2ProjektEntity ansprechpartner2ProjektEntity = new Ansprechpartner2ProjektEntity();
-                ansprechpartner2ProjektEntity.setAnsprechpartnerid((i%10)+1);
-                ansprechpartner2ProjektEntity.setProjektId((i%10)+1);
-                service.save(ansprechpartner2ProjektEntity);
+            for(int i = 1; i<31; i++){
+                if(i < 12|| i > 21){
+                    Benutzer2ProjektEntity benutzer2ProjektEntity = new Benutzer2ProjektEntity();
+                    benutzer2ProjektEntity.setBenutzerid(i+1);
+                    benutzer2ProjektEntity.setProjektid((i%10)+1);
+                    service.save(benutzer2ProjektEntity);
+                }
             }
             button.setEnabled(false);
         });
         return button;
     }
 
-    private Button createStudent2ProjektTestData(Student2ProjektService service, String name){
+    private Button createRollenTestData(RollenService service, String name){
         Button button = new Button("Import "+name);
         button.setId("import-button-"+name);
         button.addClickListener(e -> {
-            for(int i = 0; i<10; i++){
-                Student2ProjektEntity student2ProjektEntity = new Student2ProjektEntity();
-                student2ProjektEntity.setStudentId((i%4)+1);
-                student2ProjektEntity.setProjektId((i%5)+1);
-                service.save(student2ProjektEntity);
-            }
+            RollenEntity rollenEntity = new RollenEntity();
+            rollenEntity.setBezeichnung("Student");
+            service.save(rollenEntity);
+
+            rollenEntity = new RollenEntity();
+            rollenEntity.setBezeichnung("Dozent");
+            service.save(rollenEntity);
+
+            rollenEntity = new RollenEntity();
+            rollenEntity.setBezeichnung("Ansprechpartner");
+            service.save(rollenEntity);
             button.setEnabled(false);
         });
         return button;

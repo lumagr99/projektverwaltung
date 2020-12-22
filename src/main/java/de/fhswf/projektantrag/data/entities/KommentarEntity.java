@@ -59,11 +59,4 @@ public class KommentarEntity {
         result = 31 * result + (text != null ? text.hashCode() : 0);
         return result;
     }
-
-    @Override
-    public String toString() {
-        return "Id: " + this.getId() +
-                "Kommentar: " + this.getId() +
-                "ProjektId: " + this.getProjektId();
-    }
 }

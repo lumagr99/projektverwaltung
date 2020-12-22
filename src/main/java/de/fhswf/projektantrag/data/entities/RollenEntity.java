@@ -3,14 +3,14 @@ package de.fhswf.projektantrag.data.entities;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "status", schema = "projektantrag", catalog = "")
-public class StatusEntity {
+@Table(name = "rollen", schema = "projektantrag", catalog = "")
+public class RollenEntity {
     private int id;
     private String bezeichnung;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "ID", nullable = false)
     public int getId() {
         return id;
     }
@@ -20,7 +20,7 @@ public class StatusEntity {
     }
 
     @Basic
-    @Column(name = "bezeichnung", nullable = false, length = 40)
+    @Column(name = "Bezeichnung", nullable = false, length = 40)
     public String getBezeichnung() {
         return bezeichnung;
     }
@@ -34,7 +34,7 @@ public class StatusEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        StatusEntity that = (StatusEntity) o;
+        RollenEntity that = (RollenEntity) o;
 
         if (id != that.id) return false;
         return bezeichnung != null ? bezeichnung.equals(that.bezeichnung) : that.bezeichnung == null;
