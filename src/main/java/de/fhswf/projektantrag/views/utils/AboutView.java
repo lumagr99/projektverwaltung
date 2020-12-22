@@ -9,6 +9,9 @@ import de.fhswf.projektantrag.data.service.*;
 import de.fhswf.projektantrag.views.main.MainView;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Route(value = "about", layout = MainView.class)
 @PageTitle("About")
 public class AboutView extends Div {
@@ -52,55 +55,94 @@ public class AboutView extends Div {
         Button button = new Button("Import "+name);
         button.setId("import-button-"+name);
         button.addClickListener(e -> {
-            for(int i = 1; i<11; i++){
-                BenutzerEntity benutzer = new BenutzerEntity();
-                benutzer.setVorname("Hermann"+i);
-                benutzer.setNachname("Meier"+i);
-                benutzer.setBenutzername("HermannMeier"+i);
-                benutzer.setPasswort("1234"+i);
-                benutzer.setRolleId(1);
-                service.save(benutzer);
+            List<String> vornamen = Arrays.asList("Amnesix", "Augenblix",
+                    "Troubadix", "Berlix", "Asterix", "Obelix", "NullNullSix",
+                    "Polemix", "Praktidfix", "Stupidix");
+
+            for(String curr : vornamen){
+                student(curr, service);
             }
+
             button.setEnabled(false);
         });
         return button;
+    }
+
+    private BenutzerEntity student(String vorname, BenutzerService service){
+
+        BenutzerEntity benutzerEntity = new BenutzerEntity();
+        benutzerEntity.setRolleId(1);
+        benutzerEntity.setPasswort("test");
+        benutzerEntity.setVorname(vorname);
+        benutzerEntity.setNachname("Gallier");
+        benutzerEntity.setBenutzername(benutzerEntity.getNachname()+
+                benutzerEntity.getVorname());
+        service.save(benutzerEntity);
+        return benutzerEntity;
     }
 
     private Button createDozentTestData(BenutzerService service, String name){
         Button button = new Button("Import "+name);
         button.setId("import-button-"+name);
         button.addClickListener(e -> {
-            for(int i = 1; i<11; i++){
-                BenutzerEntity benutzer = new BenutzerEntity();
-                benutzer.setVorname("Herfrau"+i);
-                benutzer.setNachname("Mauer"+i);
-                benutzer.setBenutzername("HerfrauMauer"+i);
-                benutzer.setPasswort("test"+i);
-                benutzer.setRolleId(2);
-                service.save(benutzer);
+            List<String> vornamen = Arrays.asList("Appelmus", "Hohlenus",
+                    "Brutus");
+
+            for(String curr : vornamen){
+                dozent(curr, service);
             }
+
             button.setEnabled(false);
         });
         return button;
+    }
+
+    private BenutzerEntity dozent(String vorname, BenutzerService service){
+        BenutzerEntity benutzerEntity;
+        int count = 0;
+
+        benutzerEntity = new BenutzerEntity();
+        benutzerEntity.setRolleId(2);
+        benutzerEntity.setPasswort("test");
+        benutzerEntity.setVorname(vorname);
+        benutzerEntity.setNachname("Römer");
+        benutzerEntity.setBenutzername(benutzerEntity.getNachname()+
+                benutzerEntity.getVorname());
+        service.save(benutzerEntity);
+        return benutzerEntity;
     }
 
     private Button createAnsprechpartnerTestData(BenutzerService service, String name){
         Button button = new Button("Import "+name);
         button.setId("import-button-"+name);
         button.addClickListener(e -> {
-            for(int i = 1; i<11; i++){
-                BenutzerEntity ansprechpartner = new BenutzerEntity();
-                ansprechpartner.setVorname("Ferdinand"+i);
-                ansprechpartner.setNachname("Klaus"+i);
-                ansprechpartner.setBenutzername("Ferdinand"+i);
-                ansprechpartner.setPasswort("test"+i);
-                ansprechpartner.setOrganisationId(i+1);
-                ansprechpartner.setRolleId(3);
-                service.save(ansprechpartner);
+            List<String> vornamen = Arrays.asList("Baba", "Erix", "Lyrik", "Rhetorik",
+                    "Spürnix", "Stenograf", "Telegraf", "Theoretik");
+
+            int count = 1;
+            for(String curr : vornamen){
+                ansprechpartner(curr, count, service);
+                count += 1;
             }
+
             button.setEnabled(false);
         });
         return button;
+    }
+
+    private BenutzerEntity ansprechpartner(String vorname, int organisation, BenutzerService service){
+        BenutzerEntity benutzerEntity;
+
+        benutzerEntity = new BenutzerEntity();
+        benutzerEntity.setRolleId(3);
+        benutzerEntity.setPasswort("test");
+        benutzerEntity.setVorname(vorname);
+        benutzerEntity.setNachname("Völker");
+        benutzerEntity.setOrganisationId(organisation);
+        benutzerEntity.setBenutzername(benutzerEntity.getNachname()+
+                benutzerEntity.getVorname());
+        service.save(benutzerEntity);
+        return benutzerEntity;
     }
 
     private Button createStatusTestData(StatusService service, String name){
@@ -136,12 +178,25 @@ public class AboutView extends Div {
         Button button = new Button("Import "+name);
         button.setId("import-button-"+name);
         button.addClickListener(e -> {
+            List<String> titel = Arrays.asList(
+                    "Asterix der Gallier",
+                    "Der goldene Sichel",
+                    "Asterix und die Goten",
+                    "Asterix als Gladiator",
+                    "Tour de France",
+                    "Asterix und Kleopatra",
+                    "Asterix bei den Briten",
+                    "Asterix bei die Normannen",
+                    "Asterix bei den Olympischen Spielen",
+                    "Asterix in Spanien"
+            );
             for(int i = 0; i<10; i++){
                 ProjektEntity projektEntity = new ProjektEntity();
-                projektEntity.setBeschreibung("moin"+i);
-                projektEntity.setTitel("Titel"+i);
-                projektEntity.setHintergrund("hintergrund"+i);
-                projektEntity.setSkizze("Skizze"+i);
+                projektEntity.setBeschreibung("Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.\n" +
+                        "Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum.");
+                projektEntity.setTitel(titel.get(i));
+                projektEntity.setHintergrund("Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.");
+                projektEntity.setSkizze("Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum.");
                 projektEntity.setStatusid((i%4)+1);
                 service.save(projektEntity);
             }
@@ -154,9 +209,22 @@ public class AboutView extends Div {
         Button button = new Button("Import "+name);
         button.setId("import-button-"+name);
         button.addClickListener(e -> {
+            List<String> unternehmen = Arrays.asList(
+                    "Obelix GmbH & Co. KG",
+                    "FH SWF",
+                    "TassenService.de",
+                    "Roemer24",
+                    "Xiaomi",
+                    "IBM",
+                    "McDonalds",
+                    "BurgerKing",
+                    "Casio",
+                    "Adesso"
+            );
+
             for(int i = 0; i<10; i++){
                 OrganisationEntity organisationEntity = new OrganisationEntity();
-                organisationEntity.setName("Obelix GmbH & co. kg");
+                organisationEntity.setName(unternehmen.get(i));
                 service.save(organisationEntity);
             }
             button.setEnabled(false);
@@ -168,9 +236,17 @@ public class AboutView extends Div {
         Button button = new Button("Import "+name);
         button.setId("import-button-"+name);
         button.addClickListener(e -> {
-            for(int i = 0; i<10; i++){
+            List<String> kommentare = Arrays.asList(
+                    "Hier gibts keine zwei Dicken! Höchstens einen und der ist nicht dick!",
+                    "Kommt zu den Legionären, hieß es, da erlebt ihr was, hieß es!",
+                    "Alte Hiebe rosten nicht.",
+                    "Ich kam, sah, siegte!",
+                    "Sein oder nicht sein, dass ist hier die Frage!"
+            );
+
+            for(int i = 0; i<5; i++){
                 KommentarEntity kommentarEntity = new KommentarEntity();
-                kommentarEntity.setText("Kommentiert " + i);
+                kommentarEntity.setText(kommentare.get(i));
                 kommentarEntity.setProjektId(i+1);
                 service.save(kommentarEntity);
             }

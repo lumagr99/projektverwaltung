@@ -103,11 +103,10 @@ public class ProjektList extends VerticalLayout implements HasUrlParameter<Strin
                 list.add(projektService.get(entity.getProjektid()).get());
             }
         }else if (activeBenutzer.getRolle() == 2){
-            //TODO check if correct
             list = projektService.getAllByStatusId(2);
         }else if(activeBenutzer.getRolle() == 3){
-            //TODO Ansprechpartner ID get
-            List<Benutzer2ProjektEntity> projektsByAnsprechpartnerID = benutzer2ProjektService.findProjekteByBenutzerID(1);
+            List<Benutzer2ProjektEntity> projektsByAnsprechpartnerID =
+                    benutzer2ProjektService.findProjekteByBenutzerID(activeBenutzer.getId());
             for(Benutzer2ProjektEntity benutzer2ProjektEntity : projektsByAnsprechpartnerID){
                 list.add(projektService.get(benutzer2ProjektEntity.getProjektid()).get());
             }

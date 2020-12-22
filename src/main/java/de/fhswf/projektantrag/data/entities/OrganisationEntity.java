@@ -20,7 +20,7 @@ public class OrganisationEntity {
     }
 
     @Basic
-    @Column(name = "name", nullable = false, length = 40)
+    @Column(name = "name", nullable = false, length = 40, unique = true)
     public String getName() {
         return name;
     }
