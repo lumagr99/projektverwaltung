@@ -96,17 +96,16 @@ public class ProjektList extends VerticalLayout implements HasUrlParameter<Strin
         if(parametersMap.get("status") == null){
             status = -1;
         }else{
-            status = Integer.parseInt(parametersMap.get("status").get(activeStudent.getId()));
+            status = Integer.parseInt(parametersMap.get("status").get(0));
             updateList("");
         }
     }
 
     private List<ProjektEntity> generateProjektList(){
         List<ProjektEntity> list = new ArrayList<ProjektEntity>();
-
-        //HOW TO GET CURRENT USER ID?
         if(role.equalsIgnoreCase("student")){
-            List<Student2ProjektEntity> projektsByStudentID = student2ProjektService.findProjektsByStudentID(1);
+            List<Student2ProjektEntity> projektsByStudentID =
+                    student2ProjektService.findProjektsByStudentID(activeStudent.getId());
             for(Student2ProjektEntity entity : projektsByStudentID){
                 list.add(projektService.get(entity.getProjektId()).get());
             }
