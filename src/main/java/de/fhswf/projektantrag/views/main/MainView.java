@@ -19,8 +19,8 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
 import de.fhswf.projektantrag.data.service.DozentService;
-import de.fhswf.projektantrag.views.about.AboutView;
 import de.fhswf.projektantrag.views.list.ProjektList;
+import de.fhswf.projektantrag.views.utils.AboutView;
 
 import java.util.Optional;
 
