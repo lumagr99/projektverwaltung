@@ -7,8 +7,10 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
+import de.fhswf.projektantrag.data.entities.Ansprechpartner2ProjektEntity;
 import de.fhswf.projektantrag.data.entities.ProjektEntity;
 import de.fhswf.projektantrag.data.entities.Student2ProjektEntity;
+import de.fhswf.projektantrag.data.service.Ansprechpartner2ProjektService;
 import de.fhswf.projektantrag.data.service.ProjektService;
 import de.fhswf.projektantrag.data.service.Student2ProjektService;
 import de.fhswf.projektantrag.security.details.StudentUserDetails;
@@ -30,6 +32,8 @@ public class ProjektList extends VerticalLayout implements HasUrlParameter<Strin
     private ProjektService projektService;
     @Autowired
     private Student2ProjektService student2ProjektService;
+    @Autowired
+    private Ansprechpartner2ProjektService ansprechpartner2ProjektService;
 
     private int status = -1;
     private Grid<ProjektEntity> grid;
@@ -39,7 +43,9 @@ public class ProjektList extends VerticalLayout implements HasUrlParameter<Strin
     private StudentUserDetails activeStudent;
 
 
-    public ProjektList(ProjektService projektService, Student2ProjektService student2ProjektService){
+    public ProjektList(ProjektService projektService,
+                       Student2ProjektService student2ProjektService,
+                       Ansprechpartner2ProjektEntity ansprechpartner2ProjektEntity){
         setId("project-list-view");
         addClassName("project-list-view");
         setSizeFull();
@@ -109,8 +115,16 @@ public class ProjektList extends VerticalLayout implements HasUrlParameter<Strin
             for(Student2ProjektEntity entity : projektsByStudentID){
                 list.add(projektService.get(entity.getProjektId()).get());
             }
+        }else if (role.equalsIgnoreCase("dozent")){
+            //TODO check if correct
+            list = projektService.getAllByStatusId(2);
+        }else if(role.equalsIgnoreCase("ansprechpartner")){
+            //TODO Ansprechpartner ID get
+            List<Ansprechpartner2ProjektEntity> projektsByAnsprechpartnerID = ansprechpartner2ProjektService.findProjektsByAnsprechpartnerID(1);
+            for(Ansprechpartner2ProjektEntity ansprechpartner2ProjektEntity : projektsByAnsprechpartnerID){
+                list.add(projektService.get(ansprechpartner2ProjektEntity.getProjektId());
+            }
         }
-
         return list;
     }
 
