@@ -265,13 +265,12 @@ public class ProjektView extends VerticalLayout {
                 //TODO Vor und Nachname?
                 comboBox.setItemLabelGenerator(AnsprechpartnerEntity::getNachname);
                 comboBox.setItems(ansprechpartnerService.getAll());
-                System.out.println("test");
 
                 addAnsprechpartner.addClickListener(buttonClickEvent -> {
                     manageAnsprechpartnerAddButton();
                 });
 
-                this.add(comboBox, addAnsprechpartner);
+                this.add(new VerticalLayout(comboBox, addAnsprechpartner));
             }
 
             this.setWidthFull();
