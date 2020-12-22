@@ -10,7 +10,6 @@ import java.util.List;
 
 public class BenutzerUserDetails implements ProjectUserDetails {
 
-
     private final String userName;
     private final String password;
     private final int id;

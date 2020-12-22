@@ -38,8 +38,7 @@ public class ProjektList extends VerticalLayout implements HasUrlParameter<Strin
     private Grid<ProjektEntity> grid;
     private List<ProjektEntity> projekte;
 
-    private String role = "";
-    private BenutzerUserDetails activeStudent;
+    private BenutzerUserDetails activeBenutzer;
 
 
     public ProjektList(ProjektService projektService,
@@ -54,24 +53,13 @@ public class ProjektList extends VerticalLayout implements HasUrlParameter<Strin
     private void init(){
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null &&
-                auth.getAuthorities().stream().anyMatch(a ->
-                        a.getAuthority().equalsIgnoreCase("student"))) {
-            role = "Student";
-            activeStudent = (BenutzerUserDetails)auth.getPrincipal();
-        } else if (auth != null && auth.getAuthorities().stream().anyMatch(a ->
-                a.getAuthority().equalsIgnoreCase("dozent"))) {
-            role = "Dozent";
-        } else if (auth != null && auth.getAuthorities().stream().anyMatch(a ->
-                a.getAuthority().equalsIgnoreCase("ansprechpartner"))){
-            role = "Ansprechpartner";
-        }
+        activeBenutzer = (BenutzerUserDetails)auth.getPrincipal();
 
         projekte = generateProjektList();
         grid = new Grid<>(ProjektEntity.class);
         configureGrid();
 
-        if(role.equalsIgnoreCase("student")){
+        if(activeBenutzer.getRolle() == 1){
             add(getToolbar(), grid);
         }else{
             add(grid);
@@ -108,16 +96,16 @@ public class ProjektList extends VerticalLayout implements HasUrlParameter<Strin
 
     private List<ProjektEntity> generateProjektList(){
         List<ProjektEntity> list = new ArrayList<ProjektEntity>();
-        if(role.equalsIgnoreCase("student")){
+        if(activeBenutzer.getRolle() == 1){
             List<Benutzer2ProjektEntity> benutzer2ProjektEntities =
-                    benutzer2ProjektService.findProjekteByBenutzerID(activeStudent.getId());
+                    benutzer2ProjektService.findProjekteByBenutzerID(activeBenutzer.getId());
             for(Benutzer2ProjektEntity entity : benutzer2ProjektEntities){
                 list.add(projektService.get(entity.getProjektid()).get());
             }
-        }else if (role.equalsIgnoreCase("dozent")){
+        }else if (activeBenutzer.getRolle() == 2){
             //TODO check if correct
             list = projektService.getAllByStatusId(2);
-        }else if(role.equalsIgnoreCase("ansprechpartner")){
+        }else if(activeBenutzer.getRolle() == 3){
             //TODO Ansprechpartner ID get
             List<Benutzer2ProjektEntity> projektsByAnsprechpartnerID = benutzer2ProjektService.findProjekteByBenutzerID(1);
             for(Benutzer2ProjektEntity benutzer2ProjektEntity : projektsByAnsprechpartnerID){

@@ -15,6 +15,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import de.fhswf.projektantrag.data.entities.*;
 import de.fhswf.projektantrag.data.service.*;
+import de.fhswf.projektantrag.security.details.BenutzerUserDetails;
 import de.fhswf.projektantrag.views.main.MainView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -50,7 +51,7 @@ public class ProjektView extends VerticalLayout {
     private KommentareVerticalLayout kommentare;
     private StatusToolbarHorizontalLayout statusToolbar;
 
-    private String role = "";
+    private final BenutzerUserDetails activeBenutzer;
 
     ProjektView(ProjektService projektService, BenutzerService benutzerService,
                 Benutzer2ProjektService benutzer2ProjektService,
@@ -64,17 +65,7 @@ public class ProjektView extends VerticalLayout {
         createProjektEntityIfNotExist();
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null &&
-                auth.getAuthorities().stream().anyMatch(a ->
-                        a.getAuthority().equalsIgnoreCase("student"))) {
-            role = "Student";
-        } else if (auth != null && auth.getAuthorities().stream().anyMatch(a ->
-                a.getAuthority().equalsIgnoreCase("dozent"))) {
-            role = "Dozent";
-        } else if (auth != null && auth.getAuthorities().stream().anyMatch(a ->
-                a.getAuthority().equalsIgnoreCase("ansprechpartner"))){
-            role = "Ansprechpartner";
-        }
+        activeBenutzer = (BenutzerUserDetails) auth.getPrincipal();
     }
 
     @PostConstruct
@@ -95,19 +86,19 @@ public class ProjektView extends VerticalLayout {
                 toolbar,
                 statusToolbar);*/
 
-        if(role.equalsIgnoreCase("student")){
+        if(activeBenutzer.getRolle() == 1){
             this.add(textFields,
                     new H3("Studenten"), studenten,
                     new H3("Ansprechpartner"), ansprechpartner,
                     kommentare,
                     toolbar);
-        }else if(role.equalsIgnoreCase("dozent")){
+        }else if(activeBenutzer.getRolle() == 2){
             this.add(textFields,
                     new H3("Studenten"), studenten,
                     new H3("Ansprechpartner"), ansprechpartner,
                     kommentare,
                     statusToolbar);
-        }else if(role.equalsIgnoreCase("ansprechpartner")){
+        }else if(activeBenutzer.getRolle() == 3){
             this.add(textFields,
                     new H3("Studenten"), studenten,
                     new H3("Ansprechpartner"), ansprechpartner,
@@ -158,7 +149,7 @@ public class ProjektView extends VerticalLayout {
 
             if (this.getComponentCount() < 3 &&
                     projektEntity.getStatusid() == 1 &&
-                        role.equalsIgnoreCase("student")) {
+                        activeBenutzer.getRolle() == 1) {
                 comboBox = new ComboBox<BenutzerEntity>();
                 comboBox.setLabel("Student");
                 //TODO Vor und Nachname?
@@ -245,10 +236,8 @@ public class ProjektView extends VerticalLayout {
         AnsprechpartnerHorizontalLayout() {
             List<Benutzer2ProjektEntity> helper = new ArrayList<Benutzer2ProjektEntity>();
             benutzer2ProjektEntities = benutzer2ProjektService.findBenutzer2ProjektByProjektID(projektEntity.getId());
-            System.out.println(benutzer2ProjektEntities.size());
 
             for (Benutzer2ProjektEntity benutzer2Projekt : benutzer2ProjektEntities){
-                System.out.println(benutzer2Projekt.getBenutzerid());
                 BenutzerEntity benutzerEntity = benutzerService.get(benutzer2Projekt.getBenutzerid()).get();
                 if(benutzerEntity.getRolleId() == 3){
                     helper.add(benutzer2Projekt);
@@ -257,7 +246,6 @@ public class ProjektView extends VerticalLayout {
 
 
             benutzer2ProjektEntities = helper;
-            System.out.println(benutzer2ProjektEntities.size());
 
 
             if (benutzer2ProjektEntities.size() == 1) {
@@ -266,7 +254,7 @@ public class ProjektView extends VerticalLayout {
                 this.add(new AnsprechpartnerVerticalLayout(benutzerEntity));
             } else if (benutzer2ProjektEntities.size() == 0 &&
                             projektEntity.getStatusid() == 1 &&
-                                role.equalsIgnoreCase("student")) {
+                                activeBenutzer.getRolle() == 1) {
                 addBenutzer = new Button("Ansprechpartner hinzufügen");
                 addBenutzer.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
                 addBenutzer.setId("add-ansprechpartner-button");
@@ -290,7 +278,6 @@ public class ProjektView extends VerticalLayout {
         private void manageAnsprechpartnerAddButton() {
             Benutzer2ProjektEntity benutzer2ProjektEntity = new Benutzer2ProjektEntity();
             benutzer2ProjektEntity.setBenutzerid(comboBox.getValue().getId());
-            System.out.println(comboBox.getValue().getNachname());
             benutzer2ProjektEntity.setProjektid(projektEntity.getId());
             benutzer2ProjektService.save(benutzer2ProjektEntity);
             this.add(new AnsprechpartnerVerticalLayout(comboBox.getValue()));
@@ -353,7 +340,7 @@ public class ProjektView extends VerticalLayout {
             beschreibung.setHeight("80%");
 
             if (projektEntity.getStatusid() != 1 ||
-                    !role.equalsIgnoreCase("student")) {
+                    !(activeBenutzer.getRolle() == 1)) {
                 beschreibung.setReadOnly(true);
                 hintergrund.setReadOnly(true);
                 skizze.setReadOnly(true);
