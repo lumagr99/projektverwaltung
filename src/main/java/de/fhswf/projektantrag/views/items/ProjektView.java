@@ -134,13 +134,24 @@ public class ProjektView extends VerticalLayout {
     }
 
     private class StudentenHorizontalLayout extends HorizontalLayout {
-        private final List<Benutzer2ProjektEntity> benutzer2ProjektEntities;
+        private List<Benutzer2ProjektEntity> benutzer2ProjektEntities;
         private ComboBox<BenutzerEntity> comboBox;
         private Button addStudent;
 
 
         StudentenHorizontalLayout() {
+
+            List<Benutzer2ProjektEntity> helper = new ArrayList<Benutzer2ProjektEntity>();
             benutzer2ProjektEntities = benutzer2ProjektService.findBenutzer2ProjektByProjektID(projektEntity.getId());
+
+            for(Benutzer2ProjektEntity benutzer2ProjektEntity : benutzer2ProjektEntities){
+                BenutzerEntity benutzerEntity = benutzerService.get(benutzer2ProjektEntity.getBenutzerid()).get();
+                if (benutzerEntity.getRolleId() == 1){
+                    helper.add(benutzer2ProjektEntity);
+                }
+            }
+
+            benutzer2ProjektEntities = helper;
 
             for (int i = 0; i < benutzer2ProjektEntities.size(); i++) {
                 BenutzerEntity studentEntity = benutzerService.get(benutzer2ProjektEntities.get(i).getBenutzerid()).get();
@@ -153,8 +164,8 @@ public class ProjektView extends VerticalLayout {
                 comboBox = new ComboBox<BenutzerEntity>();
                 comboBox.setLabel("Student");
                 //TODO Vor und Nachname?
-                comboBox.setItemLabelGenerator(BenutzerEntity::getNachname);
-                comboBox.setItems(benutzerService.getAll());
+                comboBox.setItemLabelGenerator(BenutzerEntity::getBenutzername);
+                comboBox.setItems(benutzerService.findBenutzerEntitiesByRole(1));
 
                 manageStudentAddButton();
 
@@ -244,7 +255,6 @@ public class ProjektView extends VerticalLayout {
                 }
             }
 
-
             benutzer2ProjektEntities = helper;
 
 
@@ -262,7 +272,7 @@ public class ProjektView extends VerticalLayout {
 
                 //TODO Vor und Nachname?
                 comboBox.setItemLabelGenerator(BenutzerEntity::getNachname);
-                comboBox.setItems(benutzerService.getAll());
+                comboBox.setItems(benutzerService.findBenutzerEntitiesByRole(3));
 
                 addBenutzer.addClickListener(buttonClickEvent -> {
                     manageAnsprechpartnerAddButton();

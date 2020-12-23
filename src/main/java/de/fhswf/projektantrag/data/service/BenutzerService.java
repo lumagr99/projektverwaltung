@@ -2,6 +2,7 @@ package de.fhswf.projektantrag.data.service;
 
 import de.fhswf.projektantrag.data.dao.BenutzerDao;
 import de.fhswf.projektantrag.data.entities.BenutzerEntity;
+import de.fhswf.projektantrag.data.repository.Benutzer2ProjektRepository;
 import de.fhswf.projektantrag.data.repository.BenutzerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,9 @@ import java.util.stream.StreamSupport;
 public class BenutzerService extends BenutzerDao {
     @Autowired
     BenutzerRepository benutzerRepository;
+
+    @Autowired
+    Benutzer2ProjektRepository benutzer2ProjektRepository;
 
     @Override
     public Optional<BenutzerEntity> get(int id) {
@@ -49,5 +53,9 @@ public class BenutzerService extends BenutzerDao {
 
     public BenutzerEntity findByBenutzername(String benutzername){
         return benutzerRepository.findBenutzerEntityByBenutzername(benutzername);
+    }
+
+    public List<BenutzerEntity> findBenutzerEntitiesByRole(int rollenid){
+        return benutzerRepository.findBenutzerEntitiesByRolleId(rollenid);
     }
 }
