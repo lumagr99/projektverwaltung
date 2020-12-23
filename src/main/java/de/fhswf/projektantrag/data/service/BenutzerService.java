@@ -58,4 +58,8 @@ public class BenutzerService extends BenutzerDao {
     public List<BenutzerEntity> findBenutzerEntitiesByRole(int rollenid){
         return benutzerRepository.findBenutzerEntitiesByRolleId(rollenid);
     }
+
+    public List<BenutzerEntity> findBenutzerByOrganisationID(int id){
+        return benutzerRepository.findBenutzerEntitiesByOrganisationId(id);
+    }
 }

@@ -10,4 +10,5 @@ import java.util.List;
 public interface BenutzerRepository extends CrudRepository<BenutzerEntity, Integer> {
     BenutzerEntity findBenutzerEntityByBenutzername(String benutzername);
     List<BenutzerEntity> findBenutzerEntitiesByRolleId(int rollenid);
+    List<BenutzerEntity> findBenutzerEntitiesByOrganisationId(int organisationid);
 }

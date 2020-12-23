@@ -1,10 +1,12 @@
 package de.fhswf.projektantrag.views.list;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import de.fhswf.projektantrag.data.entities.BenutzerEntity;
+import de.fhswf.projektantrag.data.entities.OrganisationEntity;
 import de.fhswf.projektantrag.data.service.BenutzerService;
 import de.fhswf.projektantrag.security.details.BenutzerUserDetails;
 import de.fhswf.projektantrag.views.main.MainView;
@@ -23,11 +25,18 @@ public class AnsprechpartnerList extends VerticalLayout {
 
     private Grid<BenutzerEntity> grid;
     private BenutzerUserDetails activeBenutzer;
+    private OrganisationEntity organisationEntity;
 
     AnsprechpartnerList(BenutzerService benutzerService){
         setId("project-list-view");
         addClassName("project-list-view");
         setSizeFull();
+
+        try {
+            organisationEntity = UI.getCurrent().getSession().getAttribute(OrganisationEntity.class);
+        } catch (Exception e) {
+            organisationEntity = null;
+        }
     }
 
     @PostConstruct
@@ -51,15 +60,15 @@ public class AnsprechpartnerList extends VerticalLayout {
         grid.removeColumnByKey("passwort");
         grid.removeColumnByKey("benutzername");
         grid.setColumns("vorname", "nachname");
-        //grid.asSingleSelect().addValueChangeListener(e->{
-          //  UI.getCurrent().getSession().setAttribute(BenutzerEntity.class, e.getValue());
-            //UI.getCurrent().navigate("projekt");
-        //});
         updateList();
     }
 
     private void updateList() {
-        grid.setItems(benutzerService.findBenutzerEntitiesByRole(3));
+        if(organisationEntity == null){
+            grid.setItems(benutzerService.findBenutzerEntitiesByRole(3));
+        }else{
+            grid.setItems(benutzerService.findBenutzerByOrganisationID(organisationEntity.getId()));
+        }
     }
 
 
