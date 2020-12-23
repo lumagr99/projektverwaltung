@@ -19,6 +19,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
+import de.fhswf.projektantrag.views.list.OrganisationList;
 import de.fhswf.projektantrag.views.list.ProjektList;
 import de.fhswf.projektantrag.views.utils.AboutView;
 
@@ -84,9 +85,10 @@ public class MainView extends AppLayout {
     }
 
     private Component[] createMenuItems() {
-        Tab tab2 = createTab("About", AboutView.class);
-        Tab tab3 = createTab("Projekte", ProjektList.class);
-        return new Tab[]{tab2, tab3};
+        Tab tab1 = createTab("Test", AboutView.class);
+        Tab tab2 = createTab("Projekte", ProjektList.class);
+        Tab tab3 = createTab("Organisationen", OrganisationList.class);
+        return new Tab[]{tab2, tab3, tab1};
     }
 
     private static Tab createTab(String text, Class<? extends Component> navigationTarget) {

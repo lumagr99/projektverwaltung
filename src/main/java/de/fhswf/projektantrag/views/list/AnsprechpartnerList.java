@@ -32,7 +32,6 @@ public class AnsprechpartnerList extends VerticalLayout {
 
     @PostConstruct
     private void init(){
-
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         activeBenutzer = (BenutzerUserDetails)auth.getPrincipal();
 
