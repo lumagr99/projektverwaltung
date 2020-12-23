@@ -25,6 +25,12 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Generiert die Detailansicht eines Projekts für die spezifischen Benutzertypen.
+ * @author Luca Graef
+ * @date 20.12.2020
+ */
+
 @Route(value = "projekt", layout = MainView.class)
 @PageTitle("Projekt | ProjektAntrag")
 public class ProjektView extends VerticalLayout {
@@ -53,6 +59,15 @@ public class ProjektView extends VerticalLayout {
 
     private final BenutzerUserDetails activeBenutzer;
 
+    /**
+     * Initialisierung der Daten.
+     * @param projektService
+     * @param benutzerService
+     * @param benutzer2ProjektService
+     * @param kommentarService
+     * @param statusService
+     */
+
     ProjektView(ProjektService projektService, BenutzerService benutzerService,
                 Benutzer2ProjektService benutzer2ProjektService,
                 KommentarService kommentarService, StatusService statusService) {
@@ -68,6 +83,10 @@ public class ProjektView extends VerticalLayout {
         activeBenutzer = (BenutzerUserDetails) auth.getPrincipal();
     }
 
+    /**
+     * Generierung der Ansichten für die spezifischen Benutzerrollen mit erster Ausführung
+     * von Datenbankoperationen.
+     */
     @PostConstruct
     private void init() {
         createProjektEntityIfNotExist();
@@ -106,19 +125,25 @@ public class ProjektView extends VerticalLayout {
         }
     }
 
+    /**
+     * Erstellt ein neues ProjektEntity wenn keines vorhanden ist.
+     */
     private void createProjektEntityIfNotExist() {
         if (projektEntity == null) {
             projektEntity = new ProjektEntity();
             projektEntity.setStatusid(1);
             projektService.save(projektEntity);
 
-            //TODO Get StudentID by current user
             Benutzer2ProjektEntity benutzer2ProjektEntity = new Benutzer2ProjektEntity();
             benutzer2ProjektEntity.setProjektid(projektEntity.getId());
+            benutzer2ProjektEntity.setBenutzerid(activeBenutzer.getId());
             benutzer2ProjektService.save(benutzer2ProjektEntity);
         }
     }
 
+    /**
+     * Speichert das aktuelle ProjektEnitity.
+     */
     private void speichern() {
         if (textFields.getTitle() != null &&
                 textFields.getBeschreibung() != null &&
@@ -133,6 +158,9 @@ public class ProjektView extends VerticalLayout {
         }
     }
 
+    /**
+     * Generiert die Ansicht der zugewiesenen Studenten.
+     */
     private class StudentenHorizontalLayout extends HorizontalLayout {
         private List<Benutzer2ProjektEntity> benutzer2ProjektEntities;
         private ComboBox<BenutzerEntity> comboBox;
@@ -178,6 +206,10 @@ public class ProjektView extends VerticalLayout {
             this.setId("student-list");
         }
 
+        /**
+         * Verwaltet den Button neuen Studenten hinzufügen.
+         */
+
         private void manageStudentAddButton() {
             addStudent = new Button("Student hinzufügen");
             addStudent.setId("add-student-button");
@@ -209,6 +241,9 @@ public class ProjektView extends VerticalLayout {
         }
     }
 
+    /**
+     * Legt einen neuen Studenteneintrag an.
+     */
     private class StudentVerticalLayout extends VerticalLayout {
         H5 vorname;
         H5 nachname;
@@ -238,7 +273,9 @@ public class ProjektView extends VerticalLayout {
         }
     }
 
-
+    /**
+     * Generiert die Ansicht des zugewiesenen Ansprechpartners.
+     */
     private class AnsprechpartnerHorizontalLayout extends HorizontalLayout {
         private List<Benutzer2ProjektEntity> benutzer2ProjektEntities;
         private ComboBox<BenutzerEntity> comboBox;
@@ -285,6 +322,9 @@ public class ProjektView extends VerticalLayout {
             this.setId("ansprechpartner-layout");
         }
 
+        /**
+         * Verwaltet den Ansprechpartner hinzufügen Knopf.
+         */
         private void manageAnsprechpartnerAddButton() {
             Benutzer2ProjektEntity benutzer2ProjektEntity = new Benutzer2ProjektEntity();
             benutzer2ProjektEntity.setBenutzerid(comboBox.getValue().getId());
@@ -296,6 +336,9 @@ public class ProjektView extends VerticalLayout {
         }
     }
 
+    /**
+     * Generiert die Ansicht eines Ansprechpartners.
+     */
     private class AnsprechpartnerVerticalLayout extends VerticalLayout {
         BenutzerEntity ansprechpartnerEntity;
 
@@ -314,6 +357,9 @@ public class ProjektView extends VerticalLayout {
         }
     }
 
+    /**
+     * Generiert die Textfelder mit Titel, Skizze, Beschreibung des Projekthintergrunds, Beschreibung.
+     */
     private class TextFieldsVerticalLayout extends VerticalLayout {
         private final TextField title;
         private final TextArea skizze;
@@ -379,6 +425,9 @@ public class ProjektView extends VerticalLayout {
         }
     }
 
+    /**
+     * Generiert die Toolbar für die Studentenansicht mit den Funktionen Speichern, Freigeben, Schließen.
+     */
     private class ToolbarHorizontalLayout extends HorizontalLayout {
         private final Button speichern;
         private final Button freigeben;
@@ -418,6 +467,9 @@ public class ProjektView extends VerticalLayout {
         }
     }
 
+    /**
+     * Generiert die Ansicht der abgegebenen Kommentare.
+     */
     private class KommentareVerticalLayout extends VerticalLayout {
         private final List<KommentarEntity> kommentare;
 
@@ -439,6 +491,10 @@ public class ProjektView extends VerticalLayout {
         }
     }
 
+    /**
+     * Generiert die Toolbar für den Dozenten.
+     * Der Status kann geändert werden und das Projekt geschlossen werden.
+     */
     private class StatusToolbarHorizontalLayout extends HorizontalLayout {
         private final ArrayList<StatusEntity> stati;
         private final ComboBox<StatusEntity> statusEntityComboBox;
