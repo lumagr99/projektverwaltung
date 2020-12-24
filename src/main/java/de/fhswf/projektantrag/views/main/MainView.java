@@ -37,6 +37,9 @@ public class MainView extends AppLayout {
     private final Tabs menu;
     private H1 viewTitle = new H1("ProjektAntrag");
 
+    /**
+     * Initiale einstellungen
+     */
     public MainView() {
         setPrimarySection(Section.DRAWER);
         addToNavbar(true, createHeaderContent());
@@ -44,6 +47,10 @@ public class MainView extends AppLayout {
         addToDrawer(createDrawerContent(menu));
     }
 
+    /**
+     * Erstellt den Header mit Logout, ...
+     * @return
+     */
     private Component createHeaderContent() {
         Anchor logout = new Anchor("logout", "Log out");
         HorizontalLayout layout = new HorizontalLayout();
@@ -59,6 +66,11 @@ public class MainView extends AppLayout {
         return layout;
     }
 
+    /**
+     * Erstellt das Linke Menu
+     * @param menu
+     * @return
+     */
     private Component createDrawerContent(Tabs menu) {
         VerticalLayout layout = new VerticalLayout();
         layout.setSizeFull();
@@ -75,6 +87,10 @@ public class MainView extends AppLayout {
         return layout;
     }
 
+    /**
+     * Fügt das Menu hinzu
+     * @return
+     */
     private Tabs createMenu() {
         final Tabs tabs = new Tabs();
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
@@ -84,6 +100,10 @@ public class MainView extends AppLayout {
         return tabs;
     }
 
+    /**
+     * Erstellt die Menu Items.
+     * @return
+     */
     private Component[] createMenuItems() {
         Tab tab1 = createTab("Test", AboutView.class);
         Tab tab2 = createTab("Projekte", ProjektList.class);
@@ -91,6 +111,12 @@ public class MainView extends AppLayout {
         return new Tab[]{tab2, tab3, tab1};
     }
 
+    /**
+     * Erstelltl einen neuen Menu Tab.
+     * @param text
+     * @param navigationTarget
+     * @return
+     */
     private static Tab createTab(String text, Class<? extends Component> navigationTarget) {
         final Tab tab = new Tab();
         tab.add(new RouterLink(text, navigationTarget));

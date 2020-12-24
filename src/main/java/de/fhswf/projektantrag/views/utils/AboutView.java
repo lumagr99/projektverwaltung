@@ -12,6 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Nur zur Testdaten Generierung!
+ * @author Luca Graef
+ * @version 1.0 20.12.2020
+ */
+
 @Route(value = "about", layout = MainView.class)
 @PageTitle("About")
 public class AboutView extends Div {

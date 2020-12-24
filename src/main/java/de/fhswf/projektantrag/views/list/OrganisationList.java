@@ -15,6 +15,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.annotation.PostConstruct;
 
+/**
+ * Erstellt eine Liste von allen Organisationen.
+ */
 @Route(value = "organisationen", layout = MainView.class)
 @PageTitle("Organisationen | ProjektAntrag")
 public class OrganisationList extends VerticalLayout {
@@ -25,12 +28,19 @@ public class OrganisationList extends VerticalLayout {
     private Grid<OrganisationEntity> grid;
     private BenutzerUserDetails activeBenutzer;
 
+    /**
+     * Initalisiert die Seite.
+     * @param organisationService
+     */
     OrganisationList(OrganisationService organisationService){
         setId("project-list-view");
         addClassName("project-list-view");
         setSizeFull();
     }
 
+    /**
+     * Initialisiert die Daten.
+     */
     @PostConstruct
     private void init(){
 
@@ -43,6 +53,9 @@ public class OrganisationList extends VerticalLayout {
         add(grid);
     }
 
+    /**
+     * Konfiguriert die Tabelle.
+     */
     private void configureGrid() {
         grid.addClassName("organisationen-grid");
         grid.setSizeFull();
@@ -55,6 +68,9 @@ public class OrganisationList extends VerticalLayout {
         updateList();
     }
 
+    /**
+     * Aktualisiert die Tabelleneinträge.
+     */
     private void updateList() {
         grid.setItems(organisationService.getAll());
     }

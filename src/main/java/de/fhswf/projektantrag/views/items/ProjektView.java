@@ -77,7 +77,6 @@ public class ProjektView extends VerticalLayout {
         } catch (Exception e) {
             projektEntity = null;
         }
-        createProjektEntityIfNotExist();
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         activeBenutzer = (BenutzerUserDetails) auth.getPrincipal();
@@ -132,6 +131,10 @@ public class ProjektView extends VerticalLayout {
         if (projektEntity == null) {
             projektEntity = new ProjektEntity();
             projektEntity.setStatusid(1);
+            projektEntity.setTitel(" ");
+            projektEntity.setSkizze(" ");
+            projektEntity.setHintergrund(" ");
+            projektEntity.setBeschreibung(" ");
             projektService.save(projektEntity);
 
             Benutzer2ProjektEntity benutzer2ProjektEntity = new Benutzer2ProjektEntity();

@@ -23,6 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Erstellt eine Tabelle von Projekten, an die Nutzerrechte angepasst.
+ */
 @Route(value = "projekte", layout = MainView.class)
 @PageTitle("Projekte | ProjektAntrag")
 public class ProjektList extends VerticalLayout implements HasUrlParameter<String>{
@@ -49,6 +52,9 @@ public class ProjektList extends VerticalLayout implements HasUrlParameter<Strin
         setSizeFull();
     }
 
+    /**
+     * Initialisiert die benötigten Daten.
+     */
     @PostConstruct
     private void init(){
 
@@ -66,6 +72,9 @@ public class ProjektList extends VerticalLayout implements HasUrlParameter<Strin
         }
     }
 
+    /**
+     * Konfiguriert das Grid.
+     */
     private void configureGrid() {
         grid.addClassName("projekt-grid");
         grid.setSizeFull();
@@ -81,6 +90,11 @@ public class ProjektList extends VerticalLayout implements HasUrlParameter<Strin
         updateList("");
     }
 
+    /**
+     * Macht es möglich nach dem Status per queryParameter zu filtern.
+     * @param event
+     * @param parameter
+     */
     @Override
     public void setParameter(BeforeEvent event, @OptionalParameter String parameter){
         Location location = event.getLocation();
@@ -94,6 +108,10 @@ public class ProjektList extends VerticalLayout implements HasUrlParameter<Strin
         }
     }
 
+    /**
+     * Generiert die zum Benutzer passende Projektliste.
+     * @return
+     */
     private List<ProjektEntity> generateProjektList(){
         List<ProjektEntity> list = new ArrayList<ProjektEntity>();
         if(activeBenutzer.getRolle() == 1){
@@ -114,13 +132,27 @@ public class ProjektList extends VerticalLayout implements HasUrlParameter<Strin
         return list;
     }
 
+    /**
+     * Aktualisiert die grid items.
+     * @param filter
+     */
+
     private void updateList(String filter){
         grid.setItems(projekte);
     }
 
+
+    /**
+     * Erstellt ein neues Projekt und öffnet es.
+     * @return
+     */
     private HorizontalLayout getToolbar(){
         Button create = new Button("Neues Projekt");
         create.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        create.addClickListener( buttonClickEvent -> {
+            UI.getCurrent().getSession().setAttribute(ProjektEntity.class, null);
+            UI.getCurrent().navigate("projekt");
+        });
 
         HorizontalLayout toolbar = new HorizontalLayout(create);
         return toolbar;

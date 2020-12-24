@@ -16,6 +16,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.annotation.PostConstruct;
 
+/**
+ * Erstellt eine ggf. Organisationsspezifische Ansicht von Ansprechpartnern.
+ */
 @Route(value = "ansprechpartner", layout = MainView.class)
 @PageTitle("Ansprechpartner | ProjektAntrag")
 public class AnsprechpartnerList extends VerticalLayout {
