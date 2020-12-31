@@ -10,6 +10,12 @@ import org.springframework.web.context.annotation.SessionScope;
 
 import java.util.List;
 
+/**
+ * Verwaltet den Zugriff auf Organisationen session spezifisch.
+ * @author Luca Graef
+ * @version 1.0 31.12.2020
+ */
+
 @SessionScope
 @Component
 public class OrganisationManager {
@@ -26,15 +32,27 @@ public class OrganisationManager {
 
     }
 
+    /**
+     * Organisation selektieren.
+     * @param organisationID
+     */
     public void select(int organisationID){
         current = organisationService.get(organisationID).get();
         initAnsprechpartner();
     }
 
+    /**
+     * Gibt alle Ansprechpartner zurück.
+     * @return
+     */
     public List<BenutzerEntity> getAnsprechpartner(){
         return ansprechpartner;
     }
 
+    /**
+     * Fügt einen Ansprechpartner hinzu.
+     * @param benutzerEntity
+     */
     public void addAnsprechpartner(BenutzerEntity benutzerEntity){
         if(benutzerEntity == null){
             throw new IllegalArgumentException();
@@ -61,6 +79,10 @@ public class OrganisationManager {
         initAnsprechpartner();
     }
 
+    /**
+     * Entfernt einen Ansprechpartner.
+     * @param benutzerEntity
+     */
     public void removeAnsprechpartner(BenutzerEntity benutzerEntity){
         boolean inList = false;
         for (BenutzerEntity entity : ansprechpartner) {
@@ -78,10 +100,17 @@ public class OrganisationManager {
         initAnsprechpartner();
     }
 
+    /**
+     * Initialisiert die Ansprechpartnerliste.
+     */
     private void initAnsprechpartner(){
         ansprechpartner = benutzerService.findBenutzerByOrganisationID(current.getId());
     }
 
+    /**
+     * Gibt eine Liste aller Organisationen zurück.
+     * @return
+     */
     public List<OrganisationEntity> getAll(){
         return organisationService.getAll();
     }

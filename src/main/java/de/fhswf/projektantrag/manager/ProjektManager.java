@@ -15,6 +15,11 @@ import org.springframework.web.context.annotation.SessionScope;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Verwaltet den zugriff auf Projekte Session spezifisch.
+ * @Author Luca Graef
+ * @version 1.0 31.12.2020
+ */
 @SessionScope
 @Component
 public class ProjektManager {
@@ -31,12 +36,6 @@ public class ProjektManager {
     ProjektService projektService;
 
     @Autowired
-    RollenService rollenService;
-
-    @Autowired
-    StatusService statusService;
-
-    @Autowired
     OrganisationService organisationService;
 
     @Autowired
@@ -48,13 +47,16 @@ public class ProjektManager {
     BenutzerUserDetails activeBenutzer;
 
     public ProjektManager(KommentarService kommentarService, BenutzerService benutzerService,
-                          OrganisationService organisationService, StatusService statusService,
-                          RollenService rollenService, ProjektService projektService,
+                          OrganisationService organisationService, ProjektService projektService,
                           Benutzer2ProjektService benutzer2ProjektService){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         activeBenutzer = (BenutzerUserDetails) auth.getPrincipal();
     }
 
+    /**
+     * Selektiert ein Projekt.
+     * @param id
+     */
     public void select(int id){
         current = (id == 0 ? null : projektService.get(id).get());
 
@@ -79,18 +81,28 @@ public class ProjektManager {
         initKommentare();
     }
 
+    /**
+     * Aktualisiert ein Projekt.
+     */
     public void update(){
         if(current != null){
             projektService.update(current);
         }
     }
 
+    /**
+     * Löscht ein Projekt.
+     */
     public void delete(){
         if(current != null){
             projektService.delete(current);
         }
     }
 
+    /**
+     * Gibt alle Studenten zum aktuellen Projekt zurück.
+     * @return
+     */
     public List<BenutzerEntity> getStudents(){
         return studenten;
     }
@@ -116,6 +128,10 @@ public class ProjektManager {
         }
     }
 
+    /**
+     * Gibt eine Liste von Ansprechpartnern zum aktuellen Projekt zurück.
+     * @return
+     */
     public List<BenutzerEntity> getAnsprechpartner(){
         return ansprechpartner;
     }
@@ -138,10 +154,18 @@ public class ProjektManager {
         }
     }
 
+    /**
+     * Gibt eine Liste von Kommentaren zum aktuellen Projekt zurück.
+     * @return
+     */
     public List<KommentarEntity> getKommentare(){
         return kommentare;
     }
 
+    /**
+     * Fügt einen neuen Kommentar hinzu.
+     * @param kommentarEntity
+     */
     public void addKommentar(KommentarEntity kommentarEntity){
         kommentarService.save(kommentarEntity);
         kommentare.add(kommentarEntity);
@@ -149,7 +173,6 @@ public class ProjektManager {
 
     private void initStudents(){
         studenten = getBenutzer(1);
-
     }
 
     private void initAnsprechpartner(){
@@ -173,7 +196,7 @@ public class ProjektManager {
         return list;
     }
 
-
+    //Gibt das aktuelle ProjektEntity zurück.
     public ProjektEntity getCurrent() {
         return current;
     }

@@ -24,13 +24,13 @@ public class AnsprechpartnerList extends VerticalLayout {
     OrganisationManager organisationManager;
 
     private Grid<BenutzerEntity> grid;
-    private OrganisationEntity organisationEntity;
 
     AnsprechpartnerList(OrganisationManager organisationManager){
         setId("project-list-view");
         addClassName("project-list-view");
         setSizeFull();
 
+        OrganisationEntity organisationEntity;
         try {
             organisationEntity = UI.getCurrent().getSession().getAttribute(OrganisationEntity.class);
             organisationManager.select(organisationEntity.getId());
