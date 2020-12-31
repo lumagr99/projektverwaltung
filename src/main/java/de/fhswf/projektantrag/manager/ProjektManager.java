@@ -5,7 +5,10 @@ import de.fhswf.projektantrag.data.entities.BenutzerEntity;
 import de.fhswf.projektantrag.data.entities.KommentarEntity;
 import de.fhswf.projektantrag.data.entities.ProjektEntity;
 import de.fhswf.projektantrag.data.service.*;
+import de.fhswf.projektantrag.security.details.BenutzerUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
@@ -42,15 +45,18 @@ public class ProjektManager {
     @Autowired
     Benutzer2ProjektService benutzer2ProjektService;
 
+    BenutzerUserDetails activeBenutzer;
+
     public ProjektManager(KommentarService kommentarService, BenutzerService benutzerService,
                           OrganisationService organisationService, StatusService statusService,
                           RollenService rollenService, ProjektService projektService,
                           Benutzer2ProjektService benutzer2ProjektService){
-
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        activeBenutzer = (BenutzerUserDetails) auth.getPrincipal();
     }
 
     public void select(int id){
-        current = projektService.get(id).get();
+        current = (id == 0 ? null : projektService.get(id).get());
 
         if(current == null){
             ProjektEntity projektEntity = new ProjektEntity();
@@ -61,10 +67,10 @@ public class ProjektManager {
             projektEntity.setBeschreibung(" ");
             projektService.save(projektEntity);
 
-            //Benutzer2ProjektEntity benutzer2ProjektEntity = new Benutzer2ProjektEntity();
-            //benutzer2ProjektEntity.setProjektid(projektEntity.getId());
-            //benutzer2ProjektEntity.setBenutzerid(activeBenutzer.getId());
-            //benutzer2ProjektService.save(benutzer2ProjektEntity);
+            Benutzer2ProjektEntity benutzer2ProjektEntity = new Benutzer2ProjektEntity();
+            benutzer2ProjektEntity.setProjektid(projektEntity.getId());
+            benutzer2ProjektEntity.setBenutzerid(activeBenutzer.getId());
+            benutzer2ProjektService.save(benutzer2ProjektEntity);
             current = projektEntity;
         }
 
@@ -77,7 +83,6 @@ public class ProjektManager {
         if(current != null){
             projektService.update(current);
         }
-
     }
 
     public void delete(){

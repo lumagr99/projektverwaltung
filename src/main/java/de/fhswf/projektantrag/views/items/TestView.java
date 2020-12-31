@@ -77,7 +77,7 @@ public class TestView extends VerticalLayout {
             projektEntity = UI.getCurrent().getSession().getAttribute(ProjektEntity.class);
             projektManager.select(projektEntity.getId());
         } catch (Exception e) {
-            projektEntity = null;
+            projektManager.select(0);
         }
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -222,7 +222,7 @@ public class TestView extends VerticalLayout {
 
         AnsprechpartnerHorizontalLayout() {
             ansprechpartner = projektManager.getAnsprechpartner();
-            System.out.println(ansprechpartner.size());
+
             if (ansprechpartner.size() == 1) {
                 this.add(new AnsprechpartnerVerticalLayout(ansprechpartner.get(0)));
             } else if (ansprechpartner.size() == 0 &&
@@ -348,6 +348,20 @@ public class TestView extends VerticalLayout {
         }
     }
 
+    private void speichern(){
+        if (textFields.getTitle() != null &&
+                textFields.getBeschreibung() != null &&
+                textFields.getHintergrund() != null &&
+                textFields.getSkizze() != null) {
+            projektManager.getCurrent().setTitel(textFields.getTitle().getValue());
+            projektManager.getCurrent().setSkizze(textFields.getSkizze().getValue());
+            projektManager.getCurrent().setHintergrund(textFields.getHintergrund().getValue());
+            projektManager.getCurrent().setBeschreibung(textFields.getBeschreibung().getValue());
+            projektManager.update();
+
+        }
+    }
+
     /**
      * Generiert die Toolbar für die Studentenansicht mit den Funktionen Speichern, Freigeben, Schließen.
      */
@@ -360,14 +374,14 @@ public class TestView extends VerticalLayout {
             speichern = new Button("Speichern");
             speichern.setId("button-speichern");
             speichern.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-            speichern.addClickListener(e -> projektManager.update());
+            speichern.addClickListener(e -> speichern());
 
             freigeben = new Button("Freigabe beantragen");
             freigeben.setId("button-freigeben");
             freigeben.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
             freigeben.addClickListener(e -> {
                 projektManager.getCurrent().setStatusid(2);
-                projektManager.update();
+                speichern();
                 getUI().ifPresent(ui -> ui.navigate("projekte"));
             });
 
@@ -437,7 +451,7 @@ public class TestView extends VerticalLayout {
             save.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
             save.addClickListener(buttonClickEvent -> {
                 projektManager.getCurrent().setStatusid(statusEntityComboBox.getValue().getId());
-                projektManager.update();
+                speichern();
                 this.setVisible(false);
                 if (statusEntityComboBox.getValue().getId() != 3) {
                     new KommentarDialog().open();

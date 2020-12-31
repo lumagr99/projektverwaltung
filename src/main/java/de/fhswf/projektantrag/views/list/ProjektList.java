@@ -151,7 +151,7 @@ public class ProjektList extends VerticalLayout implements HasUrlParameter<Strin
         create.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         create.addClickListener( buttonClickEvent -> {
             UI.getCurrent().getSession().setAttribute(ProjektEntity.class, null);
-            UI.getCurrent().navigate("projekt");
+            UI.getCurrent().navigate("testview");
         });
 
         HorizontalLayout toolbar = new HorizontalLayout(create);
