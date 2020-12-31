@@ -85,7 +85,7 @@ public class ProjektList extends VerticalLayout implements HasUrlParameter<Strin
         grid.setColumns("id", "statusid", "titel");
         grid.asSingleSelect().addValueChangeListener(e->{
             UI.getCurrent().getSession().setAttribute(ProjektEntity.class, e.getValue());
-            UI.getCurrent().navigate("projekt");
+            UI.getCurrent().navigate("testview");
         });
         updateList("");
     }
