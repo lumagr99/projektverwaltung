@@ -7,12 +7,9 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import de.fhswf.projektantrag.data.entities.BenutzerEntity;
 import de.fhswf.projektantrag.data.entities.OrganisationEntity;
-import de.fhswf.projektantrag.data.service.BenutzerService;
-import de.fhswf.projektantrag.security.details.BenutzerUserDetails;
+import de.fhswf.projektantrag.manager.OrganisationManager;
 import de.fhswf.projektantrag.views.main.MainView;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.annotation.PostConstruct;
 
@@ -24,19 +21,19 @@ import javax.annotation.PostConstruct;
 public class AnsprechpartnerList extends VerticalLayout {
 
     @Autowired
-    BenutzerService benutzerService;
+    OrganisationManager organisationManager;
 
     private Grid<BenutzerEntity> grid;
-    private BenutzerUserDetails activeBenutzer;
     private OrganisationEntity organisationEntity;
 
-    AnsprechpartnerList(BenutzerService benutzerService){
+    AnsprechpartnerList(OrganisationManager organisationManager){
         setId("project-list-view");
         addClassName("project-list-view");
         setSizeFull();
 
         try {
             organisationEntity = UI.getCurrent().getSession().getAttribute(OrganisationEntity.class);
+            organisationManager.select(organisationEntity.getId());
         } catch (Exception e) {
             organisationEntity = null;
         }
@@ -44,8 +41,6 @@ public class AnsprechpartnerList extends VerticalLayout {
 
     @PostConstruct
     private void init(){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        activeBenutzer = (BenutzerUserDetails)auth.getPrincipal();
 
         grid = new Grid<BenutzerEntity>(BenutzerEntity.class);
         configureGrid();
@@ -67,11 +62,7 @@ public class AnsprechpartnerList extends VerticalLayout {
     }
 
     private void updateList() {
-        if(organisationEntity == null){
-            grid.setItems(benutzerService.findBenutzerEntitiesByRole(3));
-        }else{
-            grid.setItems(benutzerService.findBenutzerByOrganisationID(organisationEntity.getId()));
-        }
+        grid.setItems(organisationManager.getAnsprechpartner());
     }
 
 

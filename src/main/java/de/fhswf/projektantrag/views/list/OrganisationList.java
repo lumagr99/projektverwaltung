@@ -6,12 +6,9 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import de.fhswf.projektantrag.data.entities.OrganisationEntity;
-import de.fhswf.projektantrag.data.service.OrganisationService;
-import de.fhswf.projektantrag.security.details.BenutzerUserDetails;
+import de.fhswf.projektantrag.manager.OrganisationManager;
 import de.fhswf.projektantrag.views.main.MainView;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.annotation.PostConstruct;
 
@@ -23,16 +20,16 @@ import javax.annotation.PostConstruct;
 public class OrganisationList extends VerticalLayout {
 
     @Autowired
-    OrganisationService organisationService;
+    OrganisationManager organisationManager;
+
 
     private Grid<OrganisationEntity> grid;
-    private BenutzerUserDetails activeBenutzer;
 
     /**
      * Initalisiert die Seite.
-     * @param organisationService
+     * @param organisationManager
      */
-    OrganisationList(OrganisationService organisationService){
+    OrganisationList(OrganisationManager organisationManager){
         setId("project-list-view");
         addClassName("project-list-view");
         setSizeFull();
@@ -43,10 +40,6 @@ public class OrganisationList extends VerticalLayout {
      */
     @PostConstruct
     private void init(){
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        activeBenutzer = (BenutzerUserDetails)auth.getPrincipal();
-
         grid = new Grid<OrganisationEntity>(OrganisationEntity.class);
         configureGrid();
 
@@ -72,7 +65,7 @@ public class OrganisationList extends VerticalLayout {
      * Aktualisiert die Tabelleneinträge.
      */
     private void updateList() {
-        grid.setItems(organisationService.getAll());
+        grid.setItems(organisationManager.getAll());
     }
 
 }
