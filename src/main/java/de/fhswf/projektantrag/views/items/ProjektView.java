@@ -194,6 +194,7 @@ public class ProjektView extends VerticalLayout {
                         activeBenutzer.getRolle() == 1) {
                 comboBox = new ComboBox<BenutzerEntity>();
                 comboBox.setLabel("Student");
+
                 //TODO Vor und Nachname?
                 comboBox.setItemLabelGenerator(BenutzerEntity::getBenutzername);
                 comboBox.setItems(benutzerService.findBenutzerEntitiesByRole(1));
