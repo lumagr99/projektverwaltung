@@ -11,4 +11,5 @@ public interface BenutzerRepository extends CrudRepository<BenutzerEntity, Integ
     BenutzerEntity findBenutzerEntityByBenutzername(String benutzername);
     List<BenutzerEntity> findBenutzerEntitiesByRolleId(int rollenid);
     List<BenutzerEntity> findBenutzerEntitiesByOrganisationId(int organisationid);
+    List<BenutzerEntity> findBenutzerEntitiesByRolleIdAndIdNotIn(int rolleId, List<Integer> benutzerIds);
 }

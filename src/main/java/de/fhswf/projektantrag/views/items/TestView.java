@@ -142,10 +142,12 @@ public class TestView extends VerticalLayout {
                     projektManager.getCurrent().getStatusid() == 1 &&
                     activeBenutzer.getRolle() == 1) {
                 comboBox = new ComboBox<BenutzerEntity>();
-                comboBox.setLabel("Student");
+                comboBox.setLabel("Studenten");
                 //TODO Vor und Nachname?
                 comboBox.setItemLabelGenerator(BenutzerEntity::getBenutzername);
-                comboBox.setItems(benutzerService.findBenutzerEntitiesByRole(1));
+                comboBox.setItems(
+                        benutzerService.findBenutzerEntitiesByRolleIdAndIdNotIn(
+                                1, projektManager.getStudents()));
 
                 manageStudentAddButton();
 
@@ -235,7 +237,7 @@ public class TestView extends VerticalLayout {
 
                 //TODO Vor und Nachname?
                 comboBox.setItemLabelGenerator(BenutzerEntity::getNachname);
-                comboBox.setItems(benutzerService.findBenutzerEntitiesByRole(3));
+                comboBox.setItems(benutzerService.findBenutzerEntitiesByRolleIdAndIdNotIn(3, projektManager.getAnsprechpartner()));
 
                 addBenutzer.addClickListener(buttonClickEvent -> {
                     manageAnsprechpartnerAddButton();

@@ -7,6 +7,7 @@ import de.fhswf.projektantrag.data.repository.BenutzerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -61,5 +62,17 @@ public class BenutzerService extends BenutzerDao {
 
     public List<BenutzerEntity> findBenutzerByOrganisationID(int id){
         return benutzerRepository.findBenutzerEntitiesByOrganisationId(id);
+    }
+
+    public List<BenutzerEntity> findBenutzerEntitiesByRolleIdAndIdNotIn(int rolleid, List<BenutzerEntity> benutzer){
+
+        List<Integer> benutzerIds = new ArrayList<>();
+        for (BenutzerEntity benutzerEntity : benutzer) {
+            benutzerIds.add(benutzerEntity.getId());
+        }
+
+        if (benutzerIds.size() == 0) benutzerIds.add(0);
+
+        return benutzerRepository.findBenutzerEntitiesByRolleIdAndIdNotIn(rolleid, benutzerIds);
     }
 }
