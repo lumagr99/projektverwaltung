@@ -54,6 +54,7 @@ public class MainView extends AppLayout {
      */
     private Component createHeaderContent() {
         Anchor logout = new Anchor("logout", "Log out");
+        logout.setId("logout");
         HorizontalLayout layout = new HorizontalLayout();
         layout.setId("header");
         layout.getThemeList().set("dark", true);
