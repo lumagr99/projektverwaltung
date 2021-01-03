@@ -9,10 +9,6 @@ import java.util.List;
 
 @Repository
 public interface ProjektRepository extends CrudRepository<ProjektEntity, Integer> {
-
-
-    //List<ProjektEntity> getByStatusid(int statusid);
-    //List<ProjektEntity> getAllByStatusidAndTitel(int statusid, String titel);
     List<ProjektEntity> getAllByStatus(StatusEntity statusEntity);
     List<ProjektEntity> getAllByStatusAndTitel(StatusEntity statusEntity, String title);
 
