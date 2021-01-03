@@ -238,7 +238,9 @@ public class ProjektView extends VerticalLayout {
                 comboBox = new ComboBox<BenutzerEntity>();
 
                 //TODO Vor und Nachname?
-                comboBox.setItemLabelGenerator(BenutzerEntity::getNachname);
+                comboBox.setItemLabelGenerator(c ->{
+                    return c.getVorname() + " " + c.getNachname();
+                });
                 comboBox.setItems(benutzerService.findBenutzerEntitiesByRolleIdAndIdNotIn(3, projektManager.getAnsprechpartner()));
 
                 addBenutzer.addClickListener(buttonClickEvent -> {
