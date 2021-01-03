@@ -12,6 +12,7 @@ import org.vaadin.artur.helpers.LaunchUtil;
 @SpringBootApplication(exclude = ErrorMvcAutoConfiguration.class)
 public class Application extends SpringBootServletInitializer {
 
+    //TODO manchmal fasche weiterleitung nach login
     public static void main(String[] args) {
         LaunchUtil.launchBrowserInDevelopmentMode(SpringApplication.run(Application.class, args));
     }
