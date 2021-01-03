@@ -144,8 +144,11 @@ public class ProjektView extends VerticalLayout {
                     activeBenutzer.getRolle() == 1) {
                 comboBox = new ComboBox<BenutzerEntity>();
                 comboBox.setLabel("Studenten");
-                //TODO Vor und Nachname?
-                comboBox.setItemLabelGenerator(BenutzerEntity::getBenutzername);
+
+                comboBox.setItemLabelGenerator(c ->{
+                    return c.getVorname() + " " + c.getNachname();
+                });
+
                 comboBox.setItems(
                         benutzerService.findBenutzerEntitiesByRolleIdAndIdNotIn(
                                 1, projektManager.getStudents()));
@@ -224,7 +227,6 @@ public class ProjektView extends VerticalLayout {
         private Button addBenutzer;
 
         AnsprechpartnerHorizontalLayout() {
-            //TODO falsche liste?!?!?!
             ansprechpartner = projektManager.getAnsprechpartner();
 
             if (ansprechpartner.size() == 1) {
@@ -237,7 +239,6 @@ public class ProjektView extends VerticalLayout {
                 addBenutzer.setId("add-ansprechpartner-button");
                 comboBox = new ComboBox<BenutzerEntity>();
 
-                //TODO Vor und Nachname?
                 comboBox.setItemLabelGenerator(c ->{
                     return c.getVorname() + " " + c.getNachname();
                 });
