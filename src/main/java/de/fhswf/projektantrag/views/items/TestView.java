@@ -70,7 +70,7 @@ public class TestView extends VerticalLayout {
                 StatusService statusService,
                 OrganisationService organisationService,
                 ProjektManager projektManager,
-             StatusManager statusManager) {
+                StatusManager statusManager) {
         setSizeFull();
 
         ProjektEntity projektEntity;
@@ -78,8 +78,7 @@ public class TestView extends VerticalLayout {
             projektEntity = UI.getCurrent().getSession().getAttribute(ProjektEntity.class);
             projektManager.select(projektEntity.getId());
         } catch (Exception e) {
-            //projektManager.select(0);
-            System.out.println(e.getMessage());
+            projektManager.select(0);
         }
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -239,7 +238,7 @@ public class TestView extends VerticalLayout {
 
                 //TODO Vor und Nachname?
                 comboBox.setItemLabelGenerator(BenutzerEntity::getNachname);
-                comboBox.setItems(benutzerService.findBenutzerEntitiesByRolleIdAndIdNotIn(3, projektManager.getAnsprechpartner()));
+                comboBox.setItems(benutzerService.findBenutzerEntitiesByRolleIdAndIdNotIn(1, projektManager.getAnsprechpartner()));
 
                 addBenutzer.addClickListener(buttonClickEvent -> {
                     manageAnsprechpartnerAddButton();

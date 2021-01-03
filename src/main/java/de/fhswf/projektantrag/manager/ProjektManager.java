@@ -61,15 +61,7 @@ public class ProjektManager {
      * @param id
      */
     public void select(int id){
-        System.out.println("ID: " + id);
         current = (id == 0 ? null : projektService.get(id).get());
-
-        System.out.println("select");
-        if(current == null){
-            System.out.println("why");
-        }else {
-            System.out.println("Status: " + current.getStatus().getBezeichnung());
-        }
 
         if(current == null){
             ProjektEntity projektEntity = new ProjektEntity();
@@ -119,7 +111,7 @@ public class ProjektManager {
     }
 
     public void addStudent(BenutzerEntity benutzerEntity){
-        if(benutzerEntity.getRolleId() != 1){
+        if(benutzerEntity.getRollenEntity().getId() != 1){
             throw new IllegalArgumentException("Diese Rolle kann nicht als Student zugewiesen werden!");
         }
 
@@ -201,7 +193,7 @@ public class ProjektManager {
 
         for (Benutzer2ProjektEntity benutzer2ProjektEntity : helper) {
             BenutzerEntity curr = benutzerService.get(benutzer2ProjektEntity.getBenutzerid()).get();
-            if (curr.getRolleId() == roleID) {
+            if (curr.getRollenEntity().getId() == roleID) {
                 list.add(curr);
             }
         }

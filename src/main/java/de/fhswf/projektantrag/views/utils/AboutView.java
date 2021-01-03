@@ -81,7 +81,7 @@ public class AboutView extends Div {
     private BenutzerEntity student(String vorname, BenutzerService service){
 
         BenutzerEntity benutzerEntity = new BenutzerEntity();
-        benutzerEntity.setRolleId(1);
+        //benutzerEntity.ge;
         benutzerEntity.setPasswort("test");
         benutzerEntity.setVorname(vorname);
         benutzerEntity.setNachname("Gallier");
@@ -112,7 +112,7 @@ public class AboutView extends Div {
         int count = 0;
 
         benutzerEntity = new BenutzerEntity();
-        benutzerEntity.setRolleId(2);
+        //benutzerEntity.setRolleId(2);
         benutzerEntity.setPasswort("test");
         benutzerEntity.setVorname(vorname);
         benutzerEntity.setNachname("Römer");
@@ -144,7 +144,7 @@ public class AboutView extends Div {
         BenutzerEntity benutzerEntity;
 
         benutzerEntity = new BenutzerEntity();
-        benutzerEntity.setRolleId(3);
+        //benutzerEntity.setRolleId(3);
         benutzerEntity.setPasswort("test");
         benutzerEntity.setVorname(vorname);
         benutzerEntity.setNachname("Völker");

@@ -122,7 +122,11 @@ public class ProjektList extends VerticalLayout implements HasUrlParameter<Strin
                 list.add(projektService.get(entity.getProjektid()).get());
             }
         }else if (activeBenutzer.getRolle() == 2){
-            list = projektService.getAllByStatus(statusManager.getStatus(2));
+            try{
+                list = projektService.getAllByStatus(statusManager.getStatus(2));
+            }catch (Exception e){
+
+            }
         }else if(activeBenutzer.getRolle() == 3){
             List<Benutzer2ProjektEntity> projektsByAnsprechpartnerID =
                     benutzer2ProjektService.findProjekteByBenutzerID(activeBenutzer.getId());

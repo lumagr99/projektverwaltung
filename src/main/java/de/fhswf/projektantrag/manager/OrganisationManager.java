@@ -58,7 +58,7 @@ public class OrganisationManager {
             throw new IllegalArgumentException();
         }
 
-        if(benutzerEntity.getRolleId() != 3){
+        if(benutzerEntity.getRollenEntity().getId() != 3){
             throw new IllegalArgumentException("Ein Benutzer mit dieser Rolle kann nicht hinzugefügt werden!");
         }
 

@@ -25,7 +25,7 @@ public class BenutzerUserDetails implements ProjectUserDetails {
         this.password = benutzerEntity.getPasswort();
         this.authorities.add(new SimpleGrantedAuthority("Student"));
         this.id = benutzerEntity.getId();
-        this.role = benutzerEntity.getRolleId();
+        this.role = benutzerEntity.getRollenEntity().getId();
     }
 
     @Override

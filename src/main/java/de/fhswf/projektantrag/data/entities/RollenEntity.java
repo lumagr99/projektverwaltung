@@ -10,7 +10,7 @@ public class RollenEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID", nullable = false)
+    @Column(name = "ID", nullable = false, updatable = false)
     public int getId() {
         return id;
     }

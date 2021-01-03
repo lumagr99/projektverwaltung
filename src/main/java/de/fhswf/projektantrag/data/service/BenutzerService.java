@@ -2,8 +2,10 @@ package de.fhswf.projektantrag.data.service;
 
 import de.fhswf.projektantrag.data.dao.BenutzerDao;
 import de.fhswf.projektantrag.data.entities.BenutzerEntity;
+import de.fhswf.projektantrag.data.entities.RollenEntity;
 import de.fhswf.projektantrag.data.repository.Benutzer2ProjektRepository;
 import de.fhswf.projektantrag.data.repository.BenutzerRepository;
+import de.fhswf.projektantrag.manager.RollenManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,9 @@ public class BenutzerService extends BenutzerDao {
 
     @Autowired
     Benutzer2ProjektRepository benutzer2ProjektRepository;
+
+    @Autowired
+    RollenManager rollenManager;
 
     @Override
     public Optional<BenutzerEntity> get(int id) {
@@ -56,16 +61,17 @@ public class BenutzerService extends BenutzerDao {
         return benutzerRepository.findBenutzerEntityByBenutzername(benutzername);
     }
 
-    public List<BenutzerEntity> findBenutzerEntitiesByRole(int rollenid){
-        return benutzerRepository.findBenutzerEntitiesByRolleId(rollenid);
+    public List<BenutzerEntity> findBenutzerEntitiesByRollenEntity(int rollenId){
+        RollenEntity rollenEntity = rollenManager.getRolle(rollenId);
+        return benutzerRepository.findBenutzerEntitiesByRollenEntity(rollenEntity);
     }
 
     public List<BenutzerEntity> findBenutzerByOrganisationID(int id){
         return benutzerRepository.findBenutzerEntitiesByOrganisationId(id);
     }
 
-    public List<BenutzerEntity> findBenutzerEntitiesByRolleIdAndIdNotIn(int rolleid, List<BenutzerEntity> benutzer){
-
+    public List<BenutzerEntity> findBenutzerEntitiesByRolleIdAndIdNotIn(int rollenId, List<BenutzerEntity> benutzer){
+        RollenEntity rollenEntity = rollenManager.getRolle(rollenId);
         List<Integer> benutzerIds = new ArrayList<>();
         for (BenutzerEntity benutzerEntity : benutzer) {
             benutzerIds.add(benutzerEntity.getId());
@@ -73,6 +79,8 @@ public class BenutzerService extends BenutzerDao {
 
         if (benutzerIds.size() == 0) benutzerIds.add(0);
 
-        return benutzerRepository.findBenutzerEntitiesByRolleIdAndIdNotIn(rolleid, benutzerIds);
+        return benutzerRepository.findBenutzerEntitiesByRollenEntityAndIdNotIn(rollenEntity, benutzerIds);
     }
+
+
 }

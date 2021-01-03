@@ -6,12 +6,12 @@ import javax.persistence.*;
 @Table(name = "benutzer", schema = "projektantrag", catalog = "")
 public class BenutzerEntity {
     private int id;
-    private int rolleId;
     private String vorname;
     private String nachname;
     private String benutzername;
     private String passwort;
     private Integer organisationId;
+    private RollenEntity rollenEntity;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,14 +24,14 @@ public class BenutzerEntity {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "RolleID", nullable = false)
-    public int getRolleId() {
-        return rolleId;
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "rolleid", referencedColumnName = "id", nullable = false)
+    public RollenEntity getRollenEntity(){
+        return rollenEntity;
     }
 
-    public void setRolleId(int rolleId) {
-        this.rolleId = rolleId;
+    public void setRollenEntity(RollenEntity rollenEntity){
+        this.rollenEntity = rollenEntity;
     }
 
     @Basic
@@ -92,7 +92,7 @@ public class BenutzerEntity {
         BenutzerEntity that = (BenutzerEntity) o;
 
         if (id != that.id) return false;
-        if (rolleId != that.rolleId) return false;
+        //if (rolleId != that.rolleId) return false;
         if (vorname != null ? !vorname.equals(that.vorname) : that.vorname != null) return false;
         if (nachname != null ? !nachname.equals(that.nachname) : that.nachname != null) return false;
         if (benutzername != null ? !benutzername.equals(that.benutzername) : that.benutzername != null) return false;
@@ -103,7 +103,7 @@ public class BenutzerEntity {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + rolleId;
+        //result = 31 * result + rolleId;
         result = 31 * result + (vorname != null ? vorname.hashCode() : 0);
         result = 31 * result + (nachname != null ? nachname.hashCode() : 0);
         result = 31 * result + (benutzername != null ? benutzername.hashCode() : 0);

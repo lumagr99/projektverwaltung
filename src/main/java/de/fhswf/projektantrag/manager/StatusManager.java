@@ -17,7 +17,7 @@ public class StatusManager {
     @Autowired
     StatusService statusService;
 
-    public StatusManager(StatusService statusService){
+    StatusManager(StatusService statusService){
 
     }
 
@@ -27,10 +27,10 @@ public class StatusManager {
     }
 
     public StatusEntity getStatus(int id){
-        if(!(id > 0 && id < stati.size())){
+        if(!(id > 0 && id <= stati.size())){
             throw new IllegalArgumentException();
         }
-        return stati.get(id);
+        return stati.get(id-1);
     }
 
     public List<StatusEntity> getStati(){
