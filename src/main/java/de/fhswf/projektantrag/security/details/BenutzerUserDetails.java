@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class BenutzerUserDetails implements ProjectUserDetails {
+public class BenutzerUserDetails implements ProjektUserDetails {
 
     private final String userName;
     private final String password;
