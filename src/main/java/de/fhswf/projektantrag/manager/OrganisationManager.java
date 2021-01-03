@@ -42,6 +42,18 @@ public class OrganisationManager {
     }
 
     /**
+     * Organisation selektieren.
+     * @param organisationEntity
+     */
+    public void select(OrganisationEntity organisationEntity){
+        if(organisationEntity == null){
+            throw new IllegalArgumentException();
+        }
+        current = organisationEntity;
+        initAnsprechpartner();
+    }
+
+    /**
      * Gibt alle Ansprechpartner zurück.
      * @return
      */

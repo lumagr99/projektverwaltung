@@ -1,12 +1,10 @@
 package de.fhswf.projektantrag.views.list;
 
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import de.fhswf.projektantrag.data.entities.BenutzerEntity;
-import de.fhswf.projektantrag.data.entities.OrganisationEntity;
 import de.fhswf.projektantrag.manager.OrganisationManager;
 import de.fhswf.projektantrag.views.main.MainView;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,14 +27,6 @@ public class AnsprechpartnerList extends VerticalLayout {
         setId("project-list-view");
         addClassName("project-list-view");
         setSizeFull();
-
-        OrganisationEntity organisationEntity;
-        try {
-            organisationEntity = UI.getCurrent().getSession().getAttribute(OrganisationEntity.class);
-            organisationManager.select(organisationEntity.getId());
-        } catch (Exception e) {
-            organisationEntity = null;
-        }
     }
 
     @PostConstruct

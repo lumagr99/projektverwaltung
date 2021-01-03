@@ -54,8 +54,14 @@ public class OrganisationList extends VerticalLayout {
         grid.setSizeFull();
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
         grid.removeColumnByKey("id");
+
+        grid.addColumn(c ->{
+            organisationManager.select(c.getId());
+            return organisationManager.getAnsprechpartner().size();
+        }).setHeader("Anzahl der Ansprechpartner");
+
         grid.asSingleSelect().addValueChangeListener(e->{
-          UI.getCurrent().getSession().setAttribute(OrganisationEntity.class, e.getValue());
+          organisationManager.select(e.getValue());
           UI.getCurrent().navigate("ansprechpartner");
         });
         updateList();
