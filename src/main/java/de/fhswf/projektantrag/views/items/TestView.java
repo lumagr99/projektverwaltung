@@ -224,6 +224,7 @@ public class TestView extends VerticalLayout {
         private Button addBenutzer;
 
         AnsprechpartnerHorizontalLayout() {
+            //TODO falsche liste?!?!?!
             ansprechpartner = projektManager.getAnsprechpartner();
 
             if (ansprechpartner.size() == 1) {
