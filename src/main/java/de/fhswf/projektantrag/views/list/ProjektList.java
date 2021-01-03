@@ -91,7 +91,7 @@ public class ProjektList extends VerticalLayout implements HasUrlParameter<Strin
 
         grid.asSingleSelect().addValueChangeListener(e->{
             UI.getCurrent().getSession().setAttribute(ProjektEntity.class, e.getValue());
-            UI.getCurrent().navigate("testview");
+            UI.getCurrent().navigate("projekt");
         });
         updateList("");
     }
@@ -161,7 +161,7 @@ public class ProjektList extends VerticalLayout implements HasUrlParameter<Strin
         create.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         create.addClickListener( buttonClickEvent -> {
             UI.getCurrent().getSession().setAttribute(ProjektEntity.class, null);
-            UI.getCurrent().navigate("testview");
+            UI.getCurrent().navigate("projekt");
         });
 
         HorizontalLayout toolbar = new HorizontalLayout(create);
