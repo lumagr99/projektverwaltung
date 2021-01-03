@@ -19,7 +19,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
-import de.fhswf.projektantrag.views.items.TestView;
+import de.fhswf.projektantrag.views.items.ProjektView;
 import de.fhswf.projektantrag.views.list.OrganisationList;
 import de.fhswf.projektantrag.views.list.ProjektList;
 import de.fhswf.projektantrag.views.utils.AboutView;
@@ -110,7 +110,7 @@ public class MainView extends AppLayout {
         Tab tab1 = createTab("Test", AboutView.class);
         Tab tab2 = createTab("Projekte", ProjektList.class);
         Tab tab3 = createTab("Organisationen", OrganisationList.class);
-        Tab tab4 = createTab("TestView", TestView.class);
+        Tab tab4 = createTab("Aktuelles Projekt", ProjektView.class);
         return new Tab[]{tab2, tab3, tab1, tab4};
     }
 

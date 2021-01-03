@@ -37,9 +37,9 @@ import java.util.List;
  * @date 20.12.2020
  */
 
-@Route(value = "testview", layout = MainView.class)
-@PageTitle("Projekt | ProjektAntrag")
-public class TestView extends VerticalLayout {
+@Route(value = "projekt", layout = MainView.class)
+@PageTitle("Aktuelles Projekt | ProjektAntrag")
+public class ProjektView extends VerticalLayout {
 
     @Autowired
     private BenutzerService benutzerService;
@@ -66,7 +66,7 @@ public class TestView extends VerticalLayout {
      * @param statusService
      */
 
-    TestView(BenutzerService benutzerService,
+    ProjektView(BenutzerService benutzerService,
                 StatusService statusService,
                 OrganisationService organisationService,
                 ProjektManager projektManager,
