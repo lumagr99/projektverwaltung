@@ -226,7 +226,6 @@ public class ProjektView extends VerticalLayout {
         AnsprechpartnerHorizontalLayout() {
             //TODO falsche liste?!?!?!
             ansprechpartner = projektManager.getAnsprechpartner();
-            System.out.println(ansprechpartner.toString());
 
             if (ansprechpartner.size() == 1) {
                 this.add(new AnsprechpartnerVerticalLayout(ansprechpartner.get(0)));
