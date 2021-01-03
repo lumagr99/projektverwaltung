@@ -83,6 +83,7 @@ public class ProjektList extends VerticalLayout implements HasUrlParameter<Strin
         grid.removeColumnByKey("beschreibung");
         grid.removeColumnByKey("hintergrund");
         grid.removeColumnByKey("skizze");
+        //TODO Status namen mappen
         grid.setColumns("id", "status","titel");
         grid.asSingleSelect().addValueChangeListener(e->{
             UI.getCurrent().getSession().setAttribute(ProjektEntity.class, e.getValue());
