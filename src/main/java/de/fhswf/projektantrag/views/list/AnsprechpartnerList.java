@@ -52,11 +52,6 @@ public class AnsprechpartnerList extends VerticalLayout {
         grid.addClassName("ansprechpartner-grid");
         grid.setSizeFull();
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
-        grid.removeColumnByKey("id");
-        grid.removeColumnByKey("organisationId");
-        grid.removeColumnByKey("rolleId");
-        grid.removeColumnByKey("passwort");
-        grid.removeColumnByKey("benutzername");
         grid.setColumns("vorname", "nachname");
         updateList();
     }
