@@ -77,7 +77,8 @@ public class TestView extends VerticalLayout {
             projektEntity = UI.getCurrent().getSession().getAttribute(ProjektEntity.class);
             projektManager.select(projektEntity.getId());
         } catch (Exception e) {
-            projektManager.select(0);
+            //projektManager.select(0);
+            System.out.println(e.getMessage());
         }
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

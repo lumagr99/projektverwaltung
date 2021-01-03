@@ -10,7 +10,6 @@ import com.vaadin.flow.router.*;
 import de.fhswf.projektantrag.data.entities.Benutzer2ProjektEntity;
 import de.fhswf.projektantrag.data.entities.ProjektEntity;
 import de.fhswf.projektantrag.data.service.Benutzer2ProjektService;
-import de.fhswf.projektantrag.data.service.BenutzerService;
 import de.fhswf.projektantrag.data.service.ProjektService;
 import de.fhswf.projektantrag.security.details.BenutzerUserDetails;
 import de.fhswf.projektantrag.views.main.MainView;
@@ -34,8 +33,6 @@ public class ProjektList extends VerticalLayout implements HasUrlParameter<Strin
     private ProjektService projektService;
     @Autowired
     private Benutzer2ProjektService benutzer2ProjektService;
-    @Autowired
-    private BenutzerService benutzerService;
 
     private int status = -1;
     private Grid<ProjektEntity> grid;
@@ -45,8 +42,7 @@ public class ProjektList extends VerticalLayout implements HasUrlParameter<Strin
 
 
     public ProjektList(ProjektService projektService,
-                       Benutzer2ProjektService student2ProjektService,
-                       BenutzerService ansprechpartner2ProjektEntity){
+                       Benutzer2ProjektService student2ProjektService){
         setId("project-list-view");
         addClassName("project-list-view");
         setSizeFull();

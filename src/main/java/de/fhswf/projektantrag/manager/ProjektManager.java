@@ -58,7 +58,15 @@ public class ProjektManager {
      * @param id
      */
     public void select(int id){
+        System.out.println("ID: " + id);
         current = (id == 0 ? null : projektService.get(id).get());
+
+        System.out.println("select");
+        if(current == null){
+            System.out.println("why");
+        }else {
+            System.out.println("Status: " + current.getStatus().getBezeichnung());
+        }
 
         if(current == null){
             ProjektEntity projektEntity = new ProjektEntity();
@@ -173,6 +181,7 @@ public class ProjektManager {
 
     private void initStudents(){
         studenten = getBenutzer(1);
+        System.out.println(studenten.size());
     }
 
     private void initAnsprechpartner(){

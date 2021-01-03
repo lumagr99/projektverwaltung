@@ -2,7 +2,7 @@ package de.fhswf.projektantrag.data.entities;
 
 import javax.persistence.*;
 
-@Entity
+@Entity(name = "StatusEntity")
 @Table(name = "status", schema = "projektantrag", catalog = "")
 public class StatusEntity {
     private int id;
