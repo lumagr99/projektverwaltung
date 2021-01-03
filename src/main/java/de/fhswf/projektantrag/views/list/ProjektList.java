@@ -11,6 +11,7 @@ import de.fhswf.projektantrag.data.entities.Benutzer2ProjektEntity;
 import de.fhswf.projektantrag.data.entities.ProjektEntity;
 import de.fhswf.projektantrag.data.service.Benutzer2ProjektService;
 import de.fhswf.projektantrag.data.service.ProjektService;
+import de.fhswf.projektantrag.manager.StatusManager;
 import de.fhswf.projektantrag.security.details.BenutzerUserDetails;
 import de.fhswf.projektantrag.views.main.MainView;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,9 @@ public class ProjektList extends VerticalLayout implements HasUrlParameter<Strin
     @Autowired
     private Benutzer2ProjektService benutzer2ProjektService;
 
+    @Autowired
+    private StatusManager statusManager;
+
     private int status = -1;
     private Grid<ProjektEntity> grid;
     private List<ProjektEntity> projekte;
@@ -42,7 +46,8 @@ public class ProjektList extends VerticalLayout implements HasUrlParameter<Strin
 
 
     public ProjektList(ProjektService projektService,
-                       Benutzer2ProjektService student2ProjektService){
+                       Benutzer2ProjektService student2ProjektService,
+                       StatusManager statusManager){
         setId("project-list-view");
         addClassName("project-list-view");
         setSizeFull();
@@ -78,7 +83,7 @@ public class ProjektList extends VerticalLayout implements HasUrlParameter<Strin
         grid.removeColumnByKey("beschreibung");
         grid.removeColumnByKey("hintergrund");
         grid.removeColumnByKey("skizze");
-        grid.setColumns("id", "statusid", "titel");
+        grid.setColumns("id", "status","titel");
         grid.asSingleSelect().addValueChangeListener(e->{
             UI.getCurrent().getSession().setAttribute(ProjektEntity.class, e.getValue());
             UI.getCurrent().navigate("testview");
@@ -117,7 +122,7 @@ public class ProjektList extends VerticalLayout implements HasUrlParameter<Strin
                 list.add(projektService.get(entity.getProjektid()).get());
             }
         }else if (activeBenutzer.getRolle() == 2){
-            list = projektService.getAllByStatusId(2);
+            list = projektService.getAllByStatus(statusManager.getStatus(2));
         }else if(activeBenutzer.getRolle() == 3){
             List<Benutzer2ProjektEntity> projektsByAnsprechpartnerID =
                     benutzer2ProjektService.findProjekteByBenutzerID(activeBenutzer.getId());

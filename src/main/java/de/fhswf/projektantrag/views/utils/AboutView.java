@@ -6,6 +6,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import de.fhswf.projektantrag.data.entities.*;
 import de.fhswf.projektantrag.data.service.*;
+import de.fhswf.projektantrag.manager.StatusManager;
 import de.fhswf.projektantrag.views.main.MainView;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -27,8 +28,6 @@ public class AboutView extends Div {
     @Autowired
     private ProjektService projektService;
     @Autowired
-    private StatusService statusService;
-    @Autowired
     private KommentarService kommentarService;
     @Autowired
     private Benutzer2ProjektService benutzer2ProjektService;
@@ -36,10 +35,15 @@ public class AboutView extends Div {
     private OrganisationService organisationService;
     @Autowired
     private RollenService rollenService;
+    @Autowired
+    private StatusService statusService;
 
-    public AboutView(BenutzerService benutzerService, ProjektService projektService, StatusService statusService,
+    @Autowired
+    private StatusManager statusManager;
+
+    public AboutView(BenutzerService benutzerService, ProjektService projektService, StatusManager statusManager,
                      KommentarService kommentarService, Benutzer2ProjektService benutzer2ProjektService,
-                     OrganisationService organisationService, RollenService rollenService) {
+                     OrganisationService organisationService, RollenService rollenService, StatusService statusService) {
         setId("about-view");
 
         Button studentTestData = createStudentTestData(benutzerService, "Student");
@@ -203,7 +207,7 @@ public class AboutView extends Div {
                 projektEntity.setTitel(titel.get(i));
                 projektEntity.setHintergrund("Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.");
                 projektEntity.setSkizze("Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum.");
-                projektEntity.setStatusid((i%4)+1);
+                projektEntity.setStatus(statusManager.getStatus((i%4)+1));
                 service.save(projektEntity);
             }
             button.setEnabled(false);

@@ -21,6 +21,7 @@ import de.fhswf.projektantrag.data.service.BenutzerService;
 import de.fhswf.projektantrag.data.service.OrganisationService;
 import de.fhswf.projektantrag.data.service.StatusService;
 import de.fhswf.projektantrag.manager.ProjektManager;
+import de.fhswf.projektantrag.manager.StatusManager;
 import de.fhswf.projektantrag.security.details.BenutzerUserDetails;
 import de.fhswf.projektantrag.views.main.MainView;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -45,11 +45,11 @@ public class TestView extends VerticalLayout {
     private BenutzerService benutzerService;
     @Autowired
     private OrganisationService organisationService;
-    @Autowired
-    private StatusService statusService;
 
     @Autowired
     private ProjektManager projektManager;
+    @Autowired
+    private StatusManager statusManager;
 
     private StudentenHorizontalLayout studenten;
     private AnsprechpartnerHorizontalLayout ansprechpartner;
@@ -69,7 +69,8 @@ public class TestView extends VerticalLayout {
     TestView(BenutzerService benutzerService,
                 StatusService statusService,
                 OrganisationService organisationService,
-                ProjektManager projektManager) {
+                ProjektManager projektManager,
+             StatusManager statusManager) {
         setSizeFull();
 
         ProjektEntity projektEntity;
@@ -140,7 +141,7 @@ public class TestView extends VerticalLayout {
             }
 
             if (this.getComponentCount() < 3 &&
-                    projektManager.getCurrent().getStatusid() == 1 &&
+                    projektManager.getCurrent().getStatus().getId() == 1 &&
                     activeBenutzer.getRolle() == 1) {
                 comboBox = new ComboBox<BenutzerEntity>();
                 comboBox.setLabel("Studenten");
@@ -229,7 +230,7 @@ public class TestView extends VerticalLayout {
             if (ansprechpartner.size() == 1) {
                 this.add(new AnsprechpartnerVerticalLayout(ansprechpartner.get(0)));
             } else if (ansprechpartner.size() == 0 &&
-                    projektManager.getCurrent().getStatusid() == 1 &&
+                    projektManager.getCurrent().getStatus().getId() == 1 &&
                     activeBenutzer.getRolle() == 1) {
                 addBenutzer = new Button("Ansprechpartner hinzufügen");
                 addBenutzer.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
@@ -321,7 +322,7 @@ public class TestView extends VerticalLayout {
             beschreibung.setMinHeight("400px");
             beschreibung.setHeight("80%");
 
-            if (projektManager.getCurrent().getStatusid() != 1 ||
+            if (projektManager.getCurrent().getStatus().getId() != 1 ||
                     !(activeBenutzer.getRolle() == 1)) {
                 beschreibung.setReadOnly(true);
                 hintergrund.setReadOnly(true);
@@ -383,7 +384,7 @@ public class TestView extends VerticalLayout {
             freigeben.setId("button-freigeben");
             freigeben.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
             freigeben.addClickListener(e -> {
-                projektManager.getCurrent().setStatusid(2);
+                projektManager.getCurrent().setStatus(statusManager.getStatus(2));
                 speichern();
                 getUI().ifPresent(ui -> ui.navigate("projekte"));
             });
@@ -395,7 +396,7 @@ public class TestView extends VerticalLayout {
                 getUI().ifPresent(ui -> ui.navigate("projekte"));
             });
 
-            if (projektManager.getCurrent().getStatusid() != 1) {
+            if (projektManager.getCurrent().getStatus().getId() != 1) {
                 freigeben.setEnabled(false);
                 speichern.setEnabled(false);
             }
@@ -436,15 +437,12 @@ public class TestView extends VerticalLayout {
      * Der Status kann geändert werden und das Projekt geschlossen werden.
      */
     private class StatusToolbarHorizontalLayout extends HorizontalLayout {
-        private final ArrayList<StatusEntity> stati;
+        private final List<StatusEntity> stati;
         private final ComboBox<StatusEntity> statusEntityComboBox;
         private final Button save;
 
         StatusToolbarHorizontalLayout() {
-            stati = new ArrayList<StatusEntity>();
-            stati.add(statusService.get(1).get());
-            stati.add(statusService.get(3).get());
-            stati.add(statusService.get(4).get());
+            stati = statusManager.getStati();
 
             statusEntityComboBox = new ComboBox<>();
             statusEntityComboBox.setItemLabelGenerator(StatusEntity::getBezeichnung);
@@ -453,7 +451,7 @@ public class TestView extends VerticalLayout {
             save = new Button("Status Speichern");
             save.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
             save.addClickListener(buttonClickEvent -> {
-                projektManager.getCurrent().setStatusid(statusEntityComboBox.getValue().getId());
+                projektManager.getCurrent().setStatus(statusEntityComboBox.getValue());
                 speichern();
                 this.setVisible(false);
                 if (statusEntityComboBox.getValue().getId() != 3) {

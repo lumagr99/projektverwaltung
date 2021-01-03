@@ -44,11 +44,14 @@ public class ProjektManager {
     @Autowired
     Benutzer2ProjektService benutzer2ProjektService;
 
+    @Autowired
+    StatusManager statusManager;
+
     BenutzerUserDetails activeBenutzer;
 
     public ProjektManager(KommentarService kommentarService, BenutzerService benutzerService,
                           OrganisationService organisationService, ProjektService projektService,
-                          Benutzer2ProjektService benutzer2ProjektService){
+                          Benutzer2ProjektService benutzer2ProjektService, StatusManager statusManager){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         activeBenutzer = (BenutzerUserDetails) auth.getPrincipal();
     }
@@ -70,7 +73,7 @@ public class ProjektManager {
 
         if(current == null){
             ProjektEntity projektEntity = new ProjektEntity();
-            projektEntity.setStatusid(1);
+            projektEntity.setStatus(statusManager.getStatus(1));
             projektEntity.setTitel(" ");
             projektEntity.setSkizze(" ");
             projektEntity.setHintergrund(" ");

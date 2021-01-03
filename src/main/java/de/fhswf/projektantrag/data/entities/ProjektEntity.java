@@ -9,7 +9,6 @@ public class ProjektEntity {
     private String beschreibung;
     private String hintergrund;
     private String skizze;
-    private int statusid;
     private String titel;
     private StatusEntity status;
 
@@ -25,7 +24,7 @@ public class ProjektEntity {
     }
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "status", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "statusid", referencedColumnName = "id", nullable = false)
     public StatusEntity getStatus(){
         return status;
     }
@@ -62,16 +61,6 @@ public class ProjektEntity {
 
     public void setSkizze(String skizze) {
         this.skizze = skizze;
-    }
-
-    @Basic
-    @Column(name = "statusid", nullable = false)
-    public int getStatusid() {
-        return statusid;
-    }
-
-    public void setStatusid(int statusid) {
-        this.statusid = statusid;
     }
 
     @Basic

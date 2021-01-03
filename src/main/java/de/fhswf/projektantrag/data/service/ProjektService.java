@@ -2,6 +2,7 @@ package de.fhswf.projektantrag.data.service;
 
 import de.fhswf.projektantrag.data.dao.ProjektDao;
 import de.fhswf.projektantrag.data.entities.ProjektEntity;
+import de.fhswf.projektantrag.data.entities.StatusEntity;
 import de.fhswf.projektantrag.data.repository.ProjektRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,13 +48,13 @@ public class ProjektService extends ProjektDao {
         projektRepository.deleteById(id);
     }
 
-    public List<ProjektEntity> getAllByStatusId(int statusid){
-        List<ProjektEntity> list = StreamSupport.stream(projektRepository.getByStatusid(statusid).spliterator(), false).collect(Collectors.toList());
+    public List<ProjektEntity> getAllByStatus(StatusEntity statusEntity){
+        List<ProjektEntity> list = StreamSupport.stream(projektRepository.getAllByStatus(statusEntity).spliterator(), false).collect(Collectors.toList());
         return list;
     }
 
-    public List<ProjektEntity> getAllByStatusIdAndTitle(int statusid, String title){
-        List<ProjektEntity> list = StreamSupport.stream(projektRepository.getAllByStatusidAndTitel(statusid, title).spliterator(), false).collect(Collectors.toList());
+    public List<ProjektEntity> getAllByStatusAndTitle(StatusEntity statusEntity, String title){
+        List<ProjektEntity> list = StreamSupport.stream(projektRepository.getAllByStatusAndTitel(statusEntity, title).spliterator(), false).collect(Collectors.toList());
         return list;
     }
 
