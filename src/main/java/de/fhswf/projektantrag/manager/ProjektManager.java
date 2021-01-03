@@ -200,7 +200,10 @@ public class ProjektManager {
         return list;
     }
 
-    //Gibt das aktuelle ProjektEntity zurück.
+    /**
+     * Gibt das aktuelle ProjektEntity zurück.
+     * @return
+     */
     public ProjektEntity getCurrent() {
         return current;
     }

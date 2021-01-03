@@ -9,13 +9,18 @@ import org.springframework.web.context.annotation.ApplicationScope;
 import javax.annotation.PostConstruct;
 import java.util.List;
 
+/**
+ * Verwaltet alle verfügbaren Stati.
+ * @author Luca Graef
+ * @version 1.0 03.01.2020
+ */
 @ApplicationScope
 @Component
 public class StatusManager {
     private List<StatusEntity> stati;
 
     @Autowired
-    StatusService statusService;
+    private StatusService statusService;
 
     StatusManager(StatusService statusService){
 
@@ -26,6 +31,11 @@ public class StatusManager {
         stati = statusService.getAll();
     }
 
+    /**
+     * Gibt ein StatusEntity anhand seiner ID zurück.
+     * @param id
+     * @return
+     */
     public StatusEntity getStatus(int id){
         if(!(id > 0 && id <= stati.size())){
             throw new IllegalArgumentException();
@@ -33,6 +43,10 @@ public class StatusManager {
         return stati.get(id-1);
     }
 
+    /**
+     * Gibt eine Lister aller verfügbaren StatusEntities zurück.
+     * @return
+     */
     public List<StatusEntity> getStati(){
         return stati;
     }
