@@ -176,7 +176,6 @@ public class ProjektManager {
 
     private void initStudents(){
         studenten = getBenutzer(1);
-        System.out.println(studenten.size());
     }
 
     private void initAnsprechpartner(){
