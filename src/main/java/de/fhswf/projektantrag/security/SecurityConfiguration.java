@@ -23,6 +23,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userDetailsService);
     }
 
+    //TODO richtiger redirect nach login
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
