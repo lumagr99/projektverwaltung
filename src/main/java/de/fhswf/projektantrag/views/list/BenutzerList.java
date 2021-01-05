@@ -5,7 +5,13 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import de.fhswf.projektantrag.data.entities.BenutzerEntity;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 
+/**
+ * Eine Grundlage für Listen von Benutzerentitys.
+ * @author Luca Graef
+ * @version 1.0 05.01.2020
+ */
 public abstract class BenutzerList extends VerticalLayout {
 
     private Grid<BenutzerEntity> benutzerEntityGrid;
@@ -20,7 +26,7 @@ public abstract class BenutzerList extends VerticalLayout {
         benutzerEntityGrid = new Grid<BenutzerEntity>(BenutzerEntity.class);
 
         configureGrid();
-        updateList();
+        benutzerEntityGrid.setItems(updateList());
 
         this.add(benutzerEntityGrid);
     }
@@ -32,5 +38,9 @@ public abstract class BenutzerList extends VerticalLayout {
         benutzerEntityGrid.setColumns("vorname", "nachname");
     }
 
-    abstract void updateList();
+    /**
+     * Gibt die zu anzeigenden Entities zurück.
+     * @return
+     */
+    abstract List<BenutzerEntity> updateList();
 }

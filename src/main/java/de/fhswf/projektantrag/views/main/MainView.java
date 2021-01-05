@@ -22,7 +22,7 @@ import com.vaadin.flow.server.PWA;
 import de.fhswf.projektantrag.views.items.ProjektView;
 import de.fhswf.projektantrag.views.list.OrganisationList;
 import de.fhswf.projektantrag.views.list.ProjektList;
-import de.fhswf.projektantrag.views.utils.AboutView;
+import de.fhswf.projektantrag.views.list.StudentList;
 
 import java.util.Optional;
 
@@ -107,11 +107,11 @@ public class MainView extends AppLayout {
      * @return
      */
     private Component[] createMenuItems() {
-        Tab tab1 = createTab("Test", AboutView.class);
-        Tab tab2 = createTab("Projekte", ProjektList.class);
-        Tab tab3 = createTab("Organisationen", OrganisationList.class);
-        Tab tab4 = createTab("Aktuelles Projekt", ProjektView.class);
-        return new Tab[]{tab2, tab3, tab1, tab4};
+        Tab tab1 = createTab("Projekte", ProjektList.class);
+        Tab tab2 = createTab("Organisationen", OrganisationList.class);
+        Tab tab3 = createTab("Aktuelles Projekt", ProjektView.class);
+        Tab tab4 = createTab("Studenten", StudentList.class);
+        return new Tab[]{tab1, tab2, tab3, tab4};
     }
 
     /**
