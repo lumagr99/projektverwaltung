@@ -20,9 +20,10 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
 import de.fhswf.projektantrag.views.items.ProjektView;
-import de.fhswf.projektantrag.views.list.OrganisationList;
-import de.fhswf.projektantrag.views.list.ProjektList;
-import de.fhswf.projektantrag.views.list.StudentList;
+import de.fhswf.projektantrag.views.lists.DozentList;
+import de.fhswf.projektantrag.views.lists.OrganisationList;
+import de.fhswf.projektantrag.views.lists.ProjektList;
+import de.fhswf.projektantrag.views.lists.StudentList;
 
 import java.util.Optional;
 
@@ -111,7 +112,7 @@ public class MainView extends AppLayout {
         Tab tab2 = createTab("Organisationen", OrganisationList.class);
         Tab tab3 = createTab("Aktuelles Projekt", ProjektView.class);
         Tab tab4 = createTab("Studenten", StudentList.class);
-        Tab tab5 = createTab("Dozenten", StudentList.class);
+        Tab tab5 = createTab("Dozenten", DozentList.class);
         return new Tab[]{tab1, tab2, tab3, tab4, tab5};
     }
 

@@ -1,4 +1,4 @@
-package de.fhswf.projektantrag.views.list;
+package de.fhswf.projektantrag.views.lists;
 
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;

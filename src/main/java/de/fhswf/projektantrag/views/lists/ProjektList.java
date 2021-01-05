@@ -1,4 +1,4 @@
-package de.fhswf.projektantrag.views.list;
+package de.fhswf.projektantrag.views.lists;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
