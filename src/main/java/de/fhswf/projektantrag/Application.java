@@ -12,6 +12,8 @@ import org.vaadin.artur.helpers.LaunchUtil;
 @SpringBootApplication(exclude = ErrorMvcAutoConfiguration.class)
 public class Application extends SpringBootServletInitializer {
 
+    //TODO Nach DB create standart datenbestand?
+
     public static void main(String[] args) {
         LaunchUtil.launchBrowserInDevelopmentMode(SpringApplication.run(Application.class, args));
     }
