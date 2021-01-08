@@ -1,12 +1,24 @@
 package de.fhswf.projektantrag.data.entities;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "rollen", schema = "projektantrag", catalog = "")
 public class RollenEntity {
     private int id;
     private String bezeichnung;
+
+    private List<BenutzerEntity> benutzer;
+
+    @OneToMany(targetEntity = BenutzerEntity.class,mappedBy = "rollenEntity",fetch = FetchType.EAGER)
+    public List<BenutzerEntity> getBenutzer() {
+        return benutzer;
+    }
+
+    public void setBenutzer(List<BenutzerEntity> benutzer) {
+        this.benutzer = benutzer;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

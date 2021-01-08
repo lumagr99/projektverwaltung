@@ -11,6 +11,7 @@ public class BenutzerEntity {
     private String benutzername;
     private String passwort;
     private Integer organisationId;
+
     private RollenEntity rollenEntity;
 
     @Id

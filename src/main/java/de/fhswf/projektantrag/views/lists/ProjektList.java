@@ -8,9 +8,11 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
 import de.fhswf.projektantrag.data.entities.Benutzer2ProjektEntity;
+import de.fhswf.projektantrag.data.entities.BenutzerEntity;
 import de.fhswf.projektantrag.data.entities.ProjektEntity;
 import de.fhswf.projektantrag.data.service.Benutzer2ProjektService;
 import de.fhswf.projektantrag.data.service.ProjektService;
+import de.fhswf.projektantrag.data.service.RollenService;
 import de.fhswf.projektantrag.manager.StatusManager;
 import de.fhswf.projektantrag.security.details.BenutzerUserDetails;
 import de.fhswf.projektantrag.views.main.MainView;
@@ -37,6 +39,9 @@ public class ProjektList extends VerticalLayout implements HasUrlParameter<Strin
 
     @Autowired
     private StatusManager statusManager;
+
+    @Autowired
+    private RollenService rollenService;
 
     private int status = -1;
     private Grid<ProjektEntity> grid;
@@ -71,6 +76,8 @@ public class ProjektList extends VerticalLayout implements HasUrlParameter<Strin
         }else{
             add(grid);
         }
+
+        List<BenutzerEntity> benutzer = rollenService.get(1).get().getBenutzer();
     }
 
     /**
