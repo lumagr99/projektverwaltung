@@ -1,0 +1,1 @@
+insert into status (bezeichnung) values('testStatus');

@@ -113,7 +113,7 @@ public class MainView extends AppLayout {
         Tab tab3 = createTab("Aktuelles Projekt", ProjektView.class);
         Tab tab4 = createTab("Studenten", StudentList.class);
         Tab tab5 = createTab("Dozenten", DozentList.class);
-        return new Tab[]{tab1, tab2, tab3, tab4, tab5};
+        return new Tab[]{tab1, tab2, /*tab3, tab4, tab5*/};
     }
 
     /**
