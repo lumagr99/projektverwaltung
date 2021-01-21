@@ -9,6 +9,7 @@ einem Produktivbetrieb unbedingt angepasst werden.
 
 Beispieldaten für eine MariaDB Datenbank werden in der data.sql mitgeliefert.
 
+
 ### Kurze Projektbeschreibung
 Es existieren drei Benutzertypen Student, Dozent und Ansprechpartner.
 
