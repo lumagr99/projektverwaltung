@@ -9,7 +9,7 @@ einem Produktivbetrieb unbedingt angepasst werden.
 
 Beispieldaten für eine MariaDB Datenbank werden in der data.sql mitgeliefert.
 
-###Kurze Projektbeschreibung
+### Kurze Projektbeschreibung
 Es existieren drei Benutzertypen Student, Dozent und Ansprechpartner.
 
 Ein Student kann einen Projektantrag mit bis zu 2 weiteren Studenten ausfüllen, sowie
